@@ -1,19 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
+import { Task } from 'src/tasks/model/task.schema';
 
 export type ProyectDocument = HydratedDocument<Proyect>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Proyect {
 
     @Prop({ required: true, trim: true })
     proyectName: string;
 
     @Prop({ required: true, trim: true })
-    clientName: string
+    clientName: string;
 
     @Prop({ required: true, trim: true })
-    description: string
+    description: string;
+
+    @Prop({ type: [{ type: Array<mongoose.Schema.Types.ObjectId>, ref: 'Task' }] }) //no lo probe
+    tasks: Task[];
 }
 
 export const ProyectSchema = SchemaFactory.createForClass(Proyect);
