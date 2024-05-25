@@ -25,15 +25,11 @@ export class TasksService {
     if (!proyect) throw new NotFoundException(`Project with ID "${proyectID}" not found`);
 
     let newTask = await this.taskModel.create({...createTaskDto, proyect});
-    console.log('------------')
-    console.log('newTask:', newTask)
-    console.log('proyect:', proyect)  
+ 
     proyect.tasks.push(newTask)
     let response = await proyect.save();
     
-    console.log('newProyect:', response)
-
-    return 'This action adds a new task';
+    return response;
   }
 
 }
