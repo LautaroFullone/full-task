@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { Proyect } from 'src/proyects/model/proyect.schema';
+import { Project } from 'src/projects/model/project.schema';
 
 export const taskStatus = {
     PENDING: 'pending',
@@ -23,8 +23,8 @@ export class Task {
     @Prop({ required: true, trim: true })
     description: string;
 
-    @Prop({ type: Types.ObjectId, ref: 'Proyect' })
-    proyect: Proyect;
+    @Prop({ type: Types.ObjectId, ref: 'Project' })
+    project: Project;
 
     @Prop({ required: true, enum: Object.values(taskStatus), default: taskStatus.PENDING })
     status: TaskStatus;

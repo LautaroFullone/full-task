@@ -1,9 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 
-export class CreateProyectDto {
+export class CreateProjectDto {
 
     @IsNotEmpty()
-    proyectName: string
+    projectName: string
 
     @IsNotEmpty()
     clientName: string

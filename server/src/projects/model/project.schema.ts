@@ -2,13 +2,13 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Task } from 'src/tasks/model/task.schema';
 
-export type ProyectDocument = HydratedDocument<Proyect>;
+export type ProjectDocument = HydratedDocument<Project>;
 
 @Schema({ timestamps: true })
-export class Proyect {
+export class Project {
 
     @Prop({ required: true, trim: true })
-    proyectName: string;
+    projectName: string;
 
     @Prop({ required: true, trim: true })
     clientName: string;
@@ -20,4 +20,4 @@ export class Proyect {
     tasks: Task[];
 }
 
-export const ProyectSchema = SchemaFactory.createForClass(Proyect);
+export const ProjectSchema = SchemaFactory.createForClass(Project);

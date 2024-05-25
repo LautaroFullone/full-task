@@ -4,7 +4,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Task, TaskDocument } from './model/task.schema';
 import { Model } from 'mongoose';
-import { Proyect } from 'src/proyects/model/proyect.schema';
+import { Project } from 'src/projects/model/project.schema';
 
 interface ModelExt<T> extends Model<T> {
   delete: Function;
@@ -14,20 +14,20 @@ interface ModelExt<T> extends Model<T> {
 export class TasksService {
 
   constructor(@InjectModel(Task.name) private readonly taskModel: ModelExt<TaskDocument>,
-              @InjectModel(Proyect.name) private readonly proyectModel: ModelExt<Proyect>) { }
+              @InjectModel(Project.name) private readonly projectModel: ModelExt<Project>) { }
 
-  async createTask(proyectID: string , createTaskDto: CreateTaskDto) {
+  async createTask(projectID: string , createTaskDto: CreateTaskDto) {
     console.log('create Task ')
-    console.log('proyectID', proyectID,' | body: ',createTaskDto)
+    console.log('projectID', projectID,' | body: ',createTaskDto)
 
-    const proyect = await this.proyectModel.findById(proyectID);
+    const project = await this.projectModel.findById(projectID);
 
-    if (!proyect) throw new NotFoundException(`Project with ID "${proyectID}" not found`);
+    if (!project) throw new NotFoundException(`Project with ID "${projectID}" not found`);
 
-    let newTask = await this.taskModel.create({...createTaskDto, proyect});
+    let newTask = await this.taskModel.create({...createTaskDto, project});
  
-    proyect.tasks.push(newTask)
-    let response = await proyect.save();
+    project.tasks.push(newTask)
+    let response = await project.save();
     
     return response;
   }

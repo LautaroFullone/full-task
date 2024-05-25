@@ -13,22 +13,22 @@ export class TasksController {
   // }
 
   // @Get()
-  // getAllProyects() {
+  // getAllProjects() {
   //   return this.tasksService.getAllTask();
   // }
 
   // @Get(':id')
-  // getProyectById(@Param('id', new ObjectIdPipe()) id: string) {
-  //   return this.tasksService.getProyectById(id);
+  // getProjectById(@Param('id', new ObjectIdPipe()) id: string) {
+  //   return this.tasksService.getProjectById(id);
   // }
 
   // @Patch(':id')
-  // updateProyect(@Param('id', new ObjectIdPipe()) id: string, @Body() updateProyectDto: UpdateProyectDto) {
-  //   return this.tasksService.updateProyect(id, updateProyectDto);
+  // updateProject(@Param('id', new ObjectIdPipe()) id: string, @Body() updateprojectDto: UpdateprojectDto) {
+  //   return this.tasksService.updateProject(id, updateProjectDto);
   // }
 
   // @Delete(':id')
-  // removeProyect(@Param('id', new ObjectIdPipe()) id: string) {
-  //   return this.tasksService.removeProyect(id);
+  // removeProject(@Param('id', new ObjectIdPipe()) id: string) {
+  //   return this.tasksService.removeProject(id);
   // }
 }
