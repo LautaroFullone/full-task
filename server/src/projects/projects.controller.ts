@@ -23,6 +23,11 @@ export class ProjectsController {
     return this.tasksService.createTask(req.project, createTaskDto);
   }
 
+  @Get(':id/tasks')
+  getProjectTasks(@Req() req: RequestWithProyectValue) {
+    return this.tasksService.getTasksByProjectId(req.project._id);
+  }
+
   @Get()
   getAllProjects() {
     return this.projectsService.getAllProjects();

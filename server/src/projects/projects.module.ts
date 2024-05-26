@@ -23,6 +23,9 @@ export class ProjectsModule {
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(ValidateProjectExistsMiddleware)
-      .forRoutes({ path: 'projects/:id/tasks', method: RequestMethod.POST })
+      .forRoutes(
+        { path: 'projects/:id/tasks', method: RequestMethod.POST },
+        { path: 'projects/:id/tasks', method: RequestMethod.GET },
+      )
   }
 }
