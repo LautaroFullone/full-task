@@ -5,10 +5,12 @@ import { Types } from 'mongoose';
 export class ObjectIdPipe implements PipeTransform {
   
   transform(value: string, metadata: ArgumentMetadata) {
+
+    console.log('# ObjectIdPipe')
     
     if (!Types.ObjectId.isValid(value)) 
-      throw new BadRequestException(`Invalid ID format: ${value}`);
+      throw new BadRequestException(`PIPE: Invalid ID format: ${value}`);
 
-    return value;
+    return new Types.ObjectId(value);
   }
 }
