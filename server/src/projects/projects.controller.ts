@@ -34,8 +34,10 @@ export class ProjectsController {
 
   @Get(':id/tasks/:taskID')
   @UseGuards(ProjectExistsGuard)
-  getProjectTaskById(@Param('id', ObjectIdPipe) projectID: Types.ObjectId, @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
-    return this.tasksService.getProjectTaskById(projectID, taskID);     
+  getProjectTaskById(
+    @Param('id') projectID: Types.ObjectId, 
+    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
+      return this.tasksService.getProjectTaskById(projectID, taskID);     
   }
 
   @Get()
@@ -48,9 +50,13 @@ export class ProjectsController {
     return this.projectsService.getProjectById(id);
   }
 
-  @Patch(':id')
-  updateProject(@Param('id', ObjectIdPipe) id: string, @Body() updateProjectDto: UpdateProjectDto) {
-    return this.projectsService.updateProject(id, updateProjectDto);
+  @Patch(':id/tasks/:taskID')
+  @UseGuards(ProjectExistsGuard)
+  updateProjectTask(
+    @Param('id') id: Types.ObjectId,
+    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId, 
+    @Body() updateProjectDto: UpdateProjectDto) {
+      return this.tasksService.updateProjectTask(id, taskID, updateProjectDto);
   }
 
   @Delete(':id')
