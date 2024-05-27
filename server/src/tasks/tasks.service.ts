@@ -28,12 +28,13 @@ export class TasksService {
       { tasks: [...project.tasks, newTask._id] }
     );
 
-    return new ResponseEntity(
-      newTask, 
-      'createTask', 
-      'Tasks was successfully created', 
-      200
-    );
+    return new ResponseEntity<Task>()
+      .setData(newTask)
+      .setTitle('createTask')
+      .setMessage('Tasks was successfully created')
+      .setStatus(200)
+      .build();
+
   }
 
   async getAllTasksByProjectId(projectID: Types.ObjectId): Promise<ResponseEntity<Task[]>>{
@@ -43,12 +44,12 @@ export class TasksService {
     
     if(tasksList.length == 0) throw new EmptyListException('tasks');
 
-    return new ResponseEntity(
-      tasksList, 
-      'getAllTasksByProjectId', 
-      'Tasks were successfully found',
-      200
-    );
+    return new ResponseEntity<Task[]>()
+      .setData(tasksList)
+      .setTitle('getAllTasksByProjectId')
+      .setMessage('Tasks were successfully found')
+      .setStatus(200)
+      .build();
   }
   
   async getProjectTaskById(taskID: Types.ObjectId): Promise<ResponseEntity<Task>>{
@@ -57,12 +58,12 @@ export class TasksService {
 
     if (!task) throw new NotFoundException(`Task with ID "${taskID}" not found`);
 
-    return new ResponseEntity(
-      task, 
-      'getProjectTaskById', 
-      'Task was successfully found.', 
-      200
-    );
+    return new ResponseEntity<Task>()
+      .setData(task)
+      .setTitle('getProjectTaskById')
+      .setMessage('Task was successfully found')
+      .setStatus(200)
+      .build();
   }
 
 }

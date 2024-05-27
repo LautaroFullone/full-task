@@ -21,6 +21,7 @@ export class ProjectsController {
   }
 
   @Post(':id/tasks') 
+  @UseGuards(ProjectExistsGuard)
   createProjectTask(@Req() req: RequestWithProyectValue, @Body() createTaskDto: CreateTaskDto) {
     return this.tasksService.createTask(req.project, createTaskDto);
   }
