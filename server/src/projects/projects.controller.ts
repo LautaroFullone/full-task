@@ -34,8 +34,8 @@ export class ProjectsController {
 
   @Get(':id/tasks/:taskID')
   @UseGuards(ProjectExistsGuard)
-  getProjectTaskById(@Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
-      return this.tasksService.getProjectTaskById(taskID);     
+  getProjectTaskById(@Param('id', ObjectIdPipe) projectID: Types.ObjectId, @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
+    return this.tasksService.getProjectTaskById(projectID, taskID);     
   }
 
   @Get()

@@ -1,12 +1,12 @@
 import { CreateTaskDto } from './dto/create-task.dto';
 import { EmptyListException } from 'src/utils/exceptions/empty-list.exception';
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Project, ProjectDocument } from 'src/projects/model/project.schema';
 import { ResponseEntity } from 'src/utils/responses';
 import { Task, TaskDocument } from './model/task.schema';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { InvalidActionException } from 'src/utils/exceptions/invalid-action.exception';
 
 interface ModelExt<T> extends Model<T> {
   delete: Function;
@@ -52,11 +52,14 @@ export class TasksService {
       .build();
   }
   
-  async getProjectTaskById(taskID: Types.ObjectId): Promise<ResponseEntity<Task>>{
+  async getProjectTaskById(projectID: Types.ObjectId, taskID: Types.ObjectId): Promise<ResponseEntity<Task>>{
   
     let task = await this.taskModel.findById(taskID).populate('project'); 
 
     if (!task) throw new NotFoundException(`Task with ID "${taskID}" not found`);
+
+    //si la task no pertenece al project enviado, lanza error
+    if (task.project._id.toString() !== projectID.toString()) throw new InvalidActionException;
 
     return new ResponseEntity<Task>()
       .setData(task)
