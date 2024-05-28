@@ -6,7 +6,7 @@ import { Project, ProjectDocument } from 'src/projects/model/project.schema';
 
 export interface RequestWithProyectValue extends Request {
   project: ProjectDocument;
-}
+} //esto lo reemplazamos por el decorator de ProjectReq
 
 @Injectable()
 export class ValidateProjectExistsMiddleware implements NestMiddleware {

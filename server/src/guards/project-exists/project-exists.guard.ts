@@ -1,7 +1,6 @@
 import { BadRequestException, CanActivate, ExecutionContext, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Observable } from 'rxjs';
 import { Project, ProjectDocument } from 'src/projects/model/project.schema';
 
 @Injectable()
@@ -13,10 +12,7 @@ export class ProjectExistsGuard implements CanActivate {
 
     const [req, _] = context.getArgs();  //otras maneras de obtener request
     //const req = context.switchToHttp().getRequest();
-
     const { id: projectID } = req.params;
-
-    if (!projectID) throw new NotFoundException(`Project ID is missing`);
 
     if (!Types.ObjectId.isValid(projectID)) //duplico el pipe aqui ya que se ejecuta primero el guard
       throw new BadRequestException(`GUARD: Invalid ID format: ${projectID}`);
