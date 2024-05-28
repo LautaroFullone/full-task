@@ -30,19 +30,19 @@ export class ProjectsController {
     return this.projectsService.getAllProjects();
   }
     
-  @Get(':id')
-  getProjectById(@Param('id', ObjectIdPipe) id: string) {
-    return this.projectsService.getProjectById(id);
+  @Get(':projectID')
+  getProjectById(@Param('projectID', ObjectIdPipe) projectID: string) {
+    return this.projectsService.getProjectById(projectID);
   }
         
-  @Delete(':id')
-  deleteProject(@Param('id', new ObjectIdPipe()) id: string) {
-    return this.projectsService.deleteProject(id);
+  @Delete(':projectID')
+  deleteProject(@Param('projectID', new ObjectIdPipe()) projectID: string) {
+    return this.projectsService.deleteProject(projectID);
   }
       
   //--------------------- TASKS ---------------------
       
-  @Post(':id/tasks') 
+  @Post(':projectID/tasks') 
   @UseGuards(ProjectExistsGuard)
   createTask(
     @Body() createTaskDto: CreateTaskDto, 
@@ -50,13 +50,13 @@ export class ProjectsController {
       return this.tasksService.createTask(project, createTaskDto);
   }
 
-  @Get(':id/tasks')
+  @Get(':projectID/tasks')
   @UseGuards(ProjectExistsGuard)
   getAllTasksByProjectId(@Req() req: RequestWithProyectValue) {
     return this.tasksService.getAllTasksByProjectId(req.project);
   }
     
-  @Get(':id/tasks/:taskID')
+  @Get(':projectID/tasks/:taskID')
   @UseGuards(ProjectExistsGuard, TaskExistsGuard)
   getTaskById(
     @TaskReq() task: TaskDocument,
@@ -64,7 +64,7 @@ export class ProjectsController {
       return this.tasksService.getTaskById(project, task);     
   }
   
-  @Patch(':id/tasks/:taskID')
+  @Patch(':projectID/tasks/:taskID')
   @UseGuards(ProjectExistsGuard, TaskExistsGuard)
   updateTask(
     @TaskReq() task: TaskDocument,
@@ -73,7 +73,7 @@ export class ProjectsController {
       return this.tasksService.updateTask(project, task, updateTaskDto);
   }
 
-  @Patch(':id/tasks/:taskID/status')
+  @Patch(':projectID/tasks/:taskID/status')
   @UseGuards(ProjectExistsGuard, TaskExistsGuard)
   updateTaskStatus(
     @TaskReq() task: TaskDocument,
@@ -82,7 +82,7 @@ export class ProjectsController {
       return this.tasksService.updateTaskStatus(project, task, status);
   }
 
-  @Delete(':id/tasks/:taskID')
+  @Delete(':projectID/tasks/:taskID')
   @UseGuards(ProjectExistsGuard, TaskExistsGuard)
   deleteTask(
     @TaskReq() task: TaskDocument,
