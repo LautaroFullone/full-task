@@ -8,6 +8,7 @@ import { ResponseEntity } from 'src/utils/responses';
 import { Task, TaskDocument } from './model/task.schema';
 import { InvalidActionException } from 'src/utils/exceptions/invalid-action.exception';
 import { UpdateProjectDto } from 'src/projects/dto/update-project.dto';
+import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 
 interface ModelExt<T> extends Model<T> {
   delete: Function;
@@ -89,7 +90,7 @@ export class TasksService {
       .build();
   }
 
-  async deleteTask(project: ProjectDocument, taskID: Types.ObjectId) {
+  async deleteTask(project: ProjectDocument, taskID: Types.ObjectId): Promise<ResponseEntity<Task>> {
     
     let task = await this.taskModel.findById(taskID);
 
@@ -109,6 +110,26 @@ export class TasksService {
       .setData(task)
       .setTitle('deleteTask')
       .setMessage('Task was successfully deleted')
+      .setStatus(200)
+      .build();
+  }
+
+  async updateTaskStatus(taskID: Types.ObjectId, { status: newStatus }: UpdateTaskStatusDto): Promise<ResponseEntity<Task>>{
+    
+    let task = await this.taskModel.findById(taskID);
+
+    if (!task) throw new NotFoundException(`Task with ID "${taskID}" not found`);
+
+    // if (task.project._id.toString() !== project._id.toString()) throw new InvalidActionException;
+
+    task.status = newStatus
+    
+    const taskUpdated = await task.save();
+
+    return new ResponseEntity<Task>()
+      .setData(taskUpdated)
+      .setTitle('updateTaskStatus')
+      .setMessage('Task status was successfully updated')
       .setStatus(200)
       .build();
   }

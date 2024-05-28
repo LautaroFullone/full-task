@@ -8,6 +8,7 @@ import { RequestWithProyectValue } from 'src/middlewares/validate-project-exists
 import { TasksService } from 'src/tasks/tasks.service';
 import { Types } from 'mongoose';
 import { UpdateProjectDto } from '../projects/dto/update-project.dto';
+import { UpdateTaskStatusDto } from 'src/tasks/dto/update-task-status.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -22,8 +23,10 @@ export class ProjectsController {
 
   @Post(':id/tasks') 
   @UseGuards(ProjectExistsGuard)
-  createTask(@Req() req: RequestWithProyectValue, @Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.createTask(req.project, createTaskDto);
+  createTask(
+    @Req() req: RequestWithProyectValue, 
+    @Body() createTaskDto: CreateTaskDto) {
+      return this.tasksService.createTask(req.project, createTaskDto);
   }
 
   @Get(':id/tasks')
@@ -53,9 +56,9 @@ export class ProjectsController {
   @Patch(':id/tasks/:taskID')
   @UseGuards(ProjectExistsGuard)
   updateProjectTask(
+    @Body() updateProjectDto: UpdateProjectDto,
     @Param('id', ObjectIdPipe) projectID: Types.ObjectId,
-    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId, 
-    @Body() updateProjectDto: UpdateProjectDto) {
+    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) { 
       return this.tasksService.updateProjectTask(projectID, taskID, updateProjectDto);
   }
 
@@ -70,5 +73,13 @@ export class ProjectsController {
     @Req() req: RequestWithProyectValue,
     @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
       return this.tasksService.deleteTask(req.project, taskID);
+  }
+
+  @Patch(':id/tasks/:taskID/status')
+  @UseGuards(ProjectExistsGuard)
+  updateTaskStatus( 
+    @Body() status: UpdateTaskStatusDto,
+    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
+      return this.tasksService.updateTaskStatus(taskID, status);
   }
 }
