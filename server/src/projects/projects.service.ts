@@ -38,7 +38,7 @@ export class ProjectsService {
     return updatedProject;
   }
 
-  async removeProject(id: string) {
+  async deleteProject(id: string) {
     const deletedProject = await this.projectModel.findByIdAndDelete(id);
 
     if (!deletedProject) throw new NotFoundException(`Project with ID "${id}" not found`);

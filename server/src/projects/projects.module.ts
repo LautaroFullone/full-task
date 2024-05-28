@@ -1,16 +1,17 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ProjectsService } from '../projects/projects.service';
 import { ProjectsController } from './projects.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Project, ProjectSchema } from './model/project.schema';
 import { TasksModule } from 'src/tasks/tasks.module';
-import { ValidateProjectExistsMiddleware } from 'src/middlewares/validate-project-exists.middleware';
+import { Task, TaskSchema } from 'src/tasks/model/task.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature(
       [
-        { name: Project.name, schema: ProjectSchema }
+        { name: Project.name, schema: ProjectSchema },
+        { name: Task.name, schema: TaskSchema },
       ]
     ),
     TasksModule

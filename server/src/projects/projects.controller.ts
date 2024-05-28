@@ -6,9 +6,13 @@ import { ProjectExistsGuard } from 'src/guards/project-exists/project-exists.gua
 import { ProjectsService } from './projects.service';
 import { RequestWithProyectValue } from 'src/middlewares/validate-project-exists.middleware';
 import { TasksService } from 'src/tasks/tasks.service';
-import { Types } from 'mongoose';
-import { UpdateProjectDto } from '../projects/dto/update-project.dto';
 import { UpdateTaskStatusDto } from 'src/tasks/dto/update-task-status.dto';
+import { ProjectDocument } from './model/project.schema';
+import { ProjectReq } from 'src/utils/decorators/project-req/project-req.decorator';
+import { TaskReq } from 'src/utils/decorators/task-req/task-req.decorator';
+import { TaskDocument } from 'src/tasks/model/task.schema';
+import { TaskExistsGuard } from 'src/guards/task-exists/task-exists.guard';
+import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -20,66 +24,69 @@ export class ProjectsController {
   createProject(@Body() createProjectDto: CreateProjectDto) {
     return this.projectsService.createProject(createProjectDto);
   }
-
-  @Post(':id/tasks') 
-  @UseGuards(ProjectExistsGuard)
-  createTask(
-    @Req() req: RequestWithProyectValue, 
-    @Body() createTaskDto: CreateTaskDto) {
-      return this.tasksService.createTask(req.project, createTaskDto);
-  }
-
-  @Get(':id/tasks')
-  @UseGuards(ProjectExistsGuard)
-  getAllProjectTasks(@Req() req: RequestWithProyectValue) {
-    return this.tasksService.getAllTasksByProjectId(req.project._id);
-  }
-
-  @Get(':id/tasks/:taskID')
-  @UseGuards(ProjectExistsGuard)
-  getProjectTaskById(
-    @Param('id') projectID: Types.ObjectId, 
-    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
-      return this.tasksService.getProjectTaskById(projectID, taskID);     
-  }
-
+  
   @Get()
   getAllProjects() {
     return this.projectsService.getAllProjects();
   }
-
+    
   @Get(':id')
   getProjectById(@Param('id', ObjectIdPipe) id: string) {
     return this.projectsService.getProjectById(id);
   }
-
-  @Patch(':id/tasks/:taskID')
-  @UseGuards(ProjectExistsGuard)
-  updateProjectTask(
-    @Body() updateProjectDto: UpdateProjectDto,
-    @Param('id', ObjectIdPipe) projectID: Types.ObjectId,
-    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) { 
-      return this.tasksService.updateProjectTask(projectID, taskID, updateProjectDto);
-  }
-
+        
   @Delete(':id')
-  removeProject(@Param('id', new ObjectIdPipe()) id: string) {
-    return this.projectsService.removeProject(id);
+  deleteProject(@Param('id', new ObjectIdPipe()) id: string) {
+    return this.projectsService.deleteProject(id);
+  }
+      
+  //--------------------- TASKS ---------------------
+      
+  @Post(':id/tasks') 
+  @UseGuards(ProjectExistsGuard)
+  createTask(
+    @Body() createTaskDto: CreateTaskDto, 
+    @ProjectReq() project: ProjectDocument) { //es lo mismo que usar: @Req() req: RequestWithProyectValue -> req.project
+      return this.tasksService.createTask(project, createTaskDto);
   }
 
-  @Delete(':id/tasks/:taskID')
+  @Get(':id/tasks')
   @UseGuards(ProjectExistsGuard)
-  deleteTask(
-    @Req() req: RequestWithProyectValue,
-    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
-      return this.tasksService.deleteTask(req.project, taskID);
+  getAllTasksByProjectId(@Req() req: RequestWithProyectValue) {
+    return this.tasksService.getAllTasksByProjectId(req.project);
+  }
+    
+  @Get(':id/tasks/:taskID')
+  @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+  getTaskById(
+    @TaskReq() task: TaskDocument,
+    @ProjectReq() project: ProjectDocument,) {
+      return this.tasksService.getTaskById(project, task);     
+  }
+  
+  @Patch(':id/tasks/:taskID')
+  @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+  updateTask(
+    @TaskReq() task: TaskDocument,
+    @ProjectReq() project: ProjectDocument, 
+    @Body() updateTaskDto: UpdateTaskDto) { 
+      return this.tasksService.updateTask(project, task, updateTaskDto);
   }
 
   @Patch(':id/tasks/:taskID/status')
-  @UseGuards(ProjectExistsGuard)
-  updateTaskStatus( 
-    @Body() status: UpdateTaskStatusDto,
-    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
-      return this.tasksService.updateTaskStatus(taskID, status);
+  @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+  updateTaskStatus(
+    @TaskReq() task: TaskDocument,
+    @ProjectReq() project: ProjectDocument,
+    @Body() status: UpdateTaskStatusDto) {
+      return this.tasksService.updateTaskStatus(project, task, status);
+  }
+
+  @Delete(':id/tasks/:taskID')
+  @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+  deleteTask(
+    @TaskReq() task: TaskDocument,
+    @ProjectReq() project: ProjectDocument) {
+      return this.tasksService.deleteTask(project, task);
   }
 }
