@@ -14,7 +14,7 @@ export class TaskExistsGuard implements CanActivate {
     const { taskID } = req.params;
 
     if (!Types.ObjectId.isValid(taskID)) //duplico el pipe aqui ya que se ejecuta primero el guard
-      throw new BadRequestException(`GUARD: Invalid ID format: ${taskID}`);
+      throw new BadRequestException(`TASK GUARD: Invalid ID format: ${taskID}`);
 
     const task = await this.taskModel.findById(taskID);
 
