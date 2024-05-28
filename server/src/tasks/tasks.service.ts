@@ -87,4 +87,28 @@ export class TasksService {
       .setStatus(200)
       .build();
   }
+
+  async deleteTask(project: ProjectDocument, taskID: Types.ObjectId) {
+    
+    let task = await this.taskModel.findById(taskID);
+
+    if (!task) throw new NotFoundException(`Task with ID "${taskID}" not found`);
+
+    //si la task no pertenece al project enviado, lanza error
+    if (task.project._id.toString() !== project._id.toString()) throw new InvalidActionException;
+
+    project.tasks = project.tasks.filter(t => t._id.toString() != taskID.toString())
+
+    await Promise.allSettled([
+      this.taskModel.findByIdAndDelete(taskID),
+      project.save()
+    ]);
+
+    return new ResponseEntity<Task>()
+      .setData(task)
+      .setTitle('deleteTask')
+      .setMessage('Task was successfully deleted')
+      .setStatus(200)
+      .build();
+  }
 }

@@ -22,7 +22,7 @@ export class ProjectsController {
 
   @Post(':id/tasks') 
   @UseGuards(ProjectExistsGuard)
-  createProjectTask(@Req() req: RequestWithProyectValue, @Body() createTaskDto: CreateTaskDto) {
+  createTask(@Req() req: RequestWithProyectValue, @Body() createTaskDto: CreateTaskDto) {
     return this.tasksService.createTask(req.project, createTaskDto);
   }
 
@@ -62,5 +62,13 @@ export class ProjectsController {
   @Delete(':id')
   removeProject(@Param('id', new ObjectIdPipe()) id: string) {
     return this.projectsService.removeProject(id);
+  }
+
+  @Delete(':id/tasks/:taskID')
+  @UseGuards(ProjectExistsGuard)
+  deleteTask(
+    @Req() req: RequestWithProyectValue,
+    @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId) {
+      return this.tasksService.deleteTask(req.project, taskID);
   }
 }
