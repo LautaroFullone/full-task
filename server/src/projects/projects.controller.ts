@@ -40,7 +40,7 @@ export class ProjectsController {
     return this.projectsService.deleteProject(projectID);
   }
       
-  //--------------------- TASKS ---------------------
+  //---------------------<[ TASKS ]>---------------------
       
   @Post(':projectID/tasks') 
   @UseGuards(ProjectExistsGuard)
@@ -58,28 +58,24 @@ export class ProjectsController {
     
   @Get(':projectID/tasks/:taskID')
   @UseGuards(ProjectExistsGuard, TaskExistsGuard)
-  getTaskById(
-    @TaskReq() task: TaskDocument,
-    @ProjectReq() project: ProjectDocument,) {
-      return this.tasksService.getTaskById(project, task);     
+  getTaskById(@TaskReq() task: TaskDocument) {
+      return this.tasksService.getTaskById(task);     
   }
   
   @Patch(':projectID/tasks/:taskID')
   @UseGuards(ProjectExistsGuard, TaskExistsGuard)
   updateTask(
     @TaskReq() task: TaskDocument,
-    @ProjectReq() project: ProjectDocument, 
     @Body() updateTaskDto: UpdateTaskDto) { 
-      return this.tasksService.updateTask(project, task, updateTaskDto);
+      return this.tasksService.updateTask(task, updateTaskDto);
   }
 
   @Patch(':projectID/tasks/:taskID/status')
   @UseGuards(ProjectExistsGuard, TaskExistsGuard)
   updateTaskStatus(
     @TaskReq() task: TaskDocument,
-    @ProjectReq() project: ProjectDocument,
     @Body() status: UpdateTaskStatusDto) {
-      return this.tasksService.updateTaskStatus(project, task, status);
+      return this.tasksService.updateTaskStatus(task, status);
   }
 
   @Delete(':projectID/tasks/:taskID')

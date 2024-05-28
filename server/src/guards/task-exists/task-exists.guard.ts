@@ -2,6 +2,7 @@ import { BadRequestException, CanActivate, ExecutionContext, Injectable, NotFoun
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Task, TaskDocument } from 'src/tasks/model/task.schema';
+import { InvalidRelationshipException } from 'src/utils/exceptions/invalid-relationship.exception';
 
 @Injectable()
 export class TaskExistsGuard implements CanActivate {
@@ -10,7 +11,8 @@ export class TaskExistsGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     
-    const [req, _] = context.getArgs(); 
+    const [req, _] = context.getArgs();
+    const { project } = req;
     const { taskID } = req.params;
 
     if (!Types.ObjectId.isValid(taskID)) //duplico el pipe aqui ya que se ejecuta primero el guard
@@ -19,6 +21,12 @@ export class TaskExistsGuard implements CanActivate {
     const task = await this.taskModel.findById(taskID);
 
     if (!task) throw new NotFoundException(`Task with ID "${taskID}" not found`);
+
+    if (!project) throw new NotFoundException(`Project is missing in request`);
+
+    //si la task no pertenece al project enviado, lanza error
+    if (task.project._id.toString() !== project._id.toString())
+      throw new InvalidRelationshipException;
 
     req.task = task;
 

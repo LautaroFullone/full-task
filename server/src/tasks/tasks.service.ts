@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 import { ProjectDocument } from 'src/projects/model/project.schema';
 import { ResponseEntity } from 'src/utils/responses';
 import { Task, TaskDocument } from './model/task.schema';
-import { InvalidActionException } from 'src/utils/exceptions/invalid-action.exception';
+import { InvalidRelationshipException } from 'src/utils/exceptions/invalid-relationship.exception';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 
@@ -50,12 +50,8 @@ export class TasksService {
       .build();
   }
   
-  async getTaskById(project: ProjectDocument, task: TaskDocument): Promise<ResponseEntity<Task>>{
-    
-    //si la task no pertenece al project enviado, lanza error
-    if (task.project._id.toString() !== project._id.toString()) 
-      throw new InvalidActionException;
-    
+  async getTaskById(task: TaskDocument): Promise<ResponseEntity<Task>>{
+     
     return new ResponseEntity<Task>()
       .setData(task)
       .setTitle('getTaskById')
@@ -64,11 +60,7 @@ export class TasksService {
       .build();
   }
   
-  async updateTask(project: ProjectDocument, task: TaskDocument, updateTaskDto: UpdateTaskDto) {
-    
-    //si la task no pertenece al project enviado, lanza error
-    if (task.project._id.toString() !== project._id.toString()) 
-      throw new InvalidActionException; 
+  async updateTask(task: TaskDocument, updateTaskDto: UpdateTaskDto) { 
 
     const taskUpdated = await this.taskModel.findByIdAndUpdate(task._id, updateTaskDto, { new: true })
 
@@ -80,10 +72,7 @@ export class TasksService {
       .build();
   }
   
-  async updateTaskStatus(project: ProjectDocument, task: TaskDocument, { status: newStatus }: UpdateTaskStatusDto): Promise<ResponseEntity<Task>>{
-
-    if (task.project._id.toString() !== project._id.toString()) 
-      throw new InvalidActionException;
+  async updateTaskStatus(task: TaskDocument, { status: newStatus }: UpdateTaskStatusDto): Promise<ResponseEntity<Task>>{
 
     task.status = newStatus
     
@@ -98,10 +87,6 @@ export class TasksService {
   }
 
   async deleteTask(project: ProjectDocument, taskToDelete: TaskDocument): Promise<ResponseEntity<Task>> {
-
-    //si la task no pertenece al project enviado, lanza error
-    if (taskToDelete.project._id.toString() !== project._id.toString()) 
-      throw new InvalidActionException;
 
     project.tasks = project.tasks.filter(t => t._id.toString() != taskToDelete._id.toString())
 
