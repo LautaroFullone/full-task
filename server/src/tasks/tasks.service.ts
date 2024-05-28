@@ -19,10 +19,9 @@ export class TasksService {
   
   constructor(@InjectModel(Task.name) private readonly taskModel: ModelExt<TaskDocument>) { }
   
-
   async createTask(project: ProjectDocument, createTaskDto: CreateTaskDto): Promise<ResponseEntity<Task>> {
     
-    let newTask = await this.taskModel.create({ ...createTaskDto, project });
+    const newTask = await this.taskModel.create({ ...createTaskDto, project });
 
     project.tasks = [...project.tasks, newTask] 
     
@@ -38,7 +37,7 @@ export class TasksService {
   
   async getAllTasksByProjectId(project: ProjectDocument): Promise<ResponseEntity<Task[]>>{
     
-    let tasksList = await this.taskModel.find({ project: project._id })
+    const tasksList = await this.taskModel.find({ project: project._id })
       .populate('project'); //se pone el nombre del campo
     
     if(tasksList.length == 0) throw new EmptyListException('tasks');
