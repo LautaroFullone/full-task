@@ -72,13 +72,14 @@ export class TasksService {
   
   async updateProjectTask(projectID: Types.ObjectId, taskID: Types.ObjectId, updateProjectDto: UpdateProjectDto) {
     
-    let taskUpdated = await this.taskModel.findByIdAndUpdate(taskID, updateProjectDto, { new: true } );
+    let task = await this.taskModel.findById(taskID);
 
-    if (!taskUpdated) throw new NotFoundException(`Task with ID "${taskID}" not found`);
+    if (!task) throw new NotFoundException(`Task with ID "${taskID}" not found`);
 
     //si la task no pertenece al project enviado, lanza error
-    //FIXME: Si la task no pertenece al project, igualmente la actualiza (hay que verificar antes de updatear)
-    if (taskUpdated.project._id.toString() !== projectID.toString()) throw new InvalidActionException; 
+    if (task.project._id.toString() !== projectID.toString()) throw new InvalidActionException; 
+
+    const taskUpdated = await this.taskModel.findByIdAndUpdate(taskID, updateProjectDto, { new: true })
 
     return new ResponseEntity<Task>()
       .setData(taskUpdated)

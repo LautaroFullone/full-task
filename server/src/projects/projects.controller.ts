@@ -53,10 +53,10 @@ export class ProjectsController {
   @Patch(':id/tasks/:taskID')
   @UseGuards(ProjectExistsGuard)
   updateProjectTask(
-    @Param('id') id: Types.ObjectId,
+    @Param('id', ObjectIdPipe) projectID: Types.ObjectId,
     @Param('taskID', ObjectIdPipe) taskID: Types.ObjectId, 
     @Body() updateProjectDto: UpdateProjectDto) {
-      return this.tasksService.updateProjectTask(id, taskID, updateProjectDto);
+      return this.tasksService.updateProjectTask(projectID, taskID, updateProjectDto);
   }
 
   @Delete(':id')
