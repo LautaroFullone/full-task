@@ -1,7 +1,8 @@
 import ProjectForm from "@/components/projects/ProjectForm";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { ProjectFormData } from "types";
+import { createProject } from "@/services/api";
+import { ProjectFormData } from "@/types/index";
 
 export default function CreateProjectView() {
 
@@ -15,6 +16,7 @@ export default function CreateProjectView() {
 
     function onSubmit(data: ProjectFormData) {
         console.log('onSubmit: ',data)
+        createProject(data)
     }
 
     function onError() {
