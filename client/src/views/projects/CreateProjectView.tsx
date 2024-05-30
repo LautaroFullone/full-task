@@ -4,10 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { createProject } from "@/services/api";
 import { ProjectFormData } from "@/types/index";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 export default function CreateProjectView() {
-
-    const navigate = useNavigate();
 
     const initialValues: ProjectFormData = {
         projectName: "",
@@ -16,17 +15,22 @@ export default function CreateProjectView() {
     }
 
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
+    
+    const mutation = useMutation({
+        mutationFn: createProject,
+        onSuccess: (response) => {
+            toast.success(response.message);
+            navigate('/');
+        },
+        onError: (response) => { 
+            toast.error(response.message)
+        }
+    })
+    const navigate = useNavigate();
 
-    async function onSubmit(data: ProjectFormData) {
-        const response = await createProject(data);
-        console.log('onSubmit', response);
-        toast.success(response.message)
-        navigate('/')
-    }
-
-    function onError() {
-
-    }
+    function onSubmit(data: ProjectFormData){ 
+        mutation.mutate(data) 
+    }   
 
     return (
         <>
@@ -41,7 +45,7 @@ export default function CreateProjectView() {
                     </Link>
                 </nav>
 
-                <form onSubmit={handleSubmit(onSubmit, onError)}
+                <form onSubmit={handleSubmit(onSubmit)}
                     className="mt-10 shadow-lg p-10 rounded-lg"
                     noValidate
                 >
