@@ -8,12 +8,12 @@ export default function EditProjectView() {
     const { projectID } = useParams()
 
     const { data, isError, isLoading } = useQuery({
-        queryKey: ['editProject', projectID], //para tener un identificador dinamico
+        queryKey: ['editProject', projectID], //para tener un identificador dinamico TODO: dsp de updatear muestra lo anterior
         queryFn: () => getProjectById(projectID!),
         retry: false,
     })
 
     if(isLoading) return 'Cargando...'
     if(isError) return <Navigate to={'error'}/>
-    if(data) return <EditProjectForm project={data.records}/>
+    if(data) return <EditProjectForm project={data.records} projectID={projectID!}/>
 }

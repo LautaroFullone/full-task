@@ -50,10 +50,9 @@ export class ProjectsService {
       .build();
   }
 
-  async updateProject(id: string, updateProjectDto: UpdateProjectDto): Promise<ResponseEntity<Project>> {
-    const updatedProject = await this.projectModel.findByIdAndUpdate(id, updateProjectDto)
-
-    if (!updatedProject) throw new NotFoundException(`Project with ID "${id}" not found`);
+  async updateProject(project: ProjectDocument, updateProjectDto: UpdateProjectDto): Promise<ResponseEntity<Project>> {
+    
+    const updatedProject = await this.projectModel.findByIdAndUpdate(project._id, updateProjectDto, { new: true })
 
     return new ResponseEntity<Project>()
       .setRecords(updatedProject)

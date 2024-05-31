@@ -13,6 +13,7 @@ import { TaskReq } from 'src/utils/decorators/task-req/task-req.decorator';
 import { TaskDocument } from 'src/tasks/model/task.schema';
 import { TaskExistsGuard } from 'src/guards/task-exists/task-exists.guard';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -33,6 +34,14 @@ export class ProjectsController {
   @Get(':projectID')
   getProjectById(@Param('projectID', ObjectIdPipe) projectID: string) {
     return this.projectsService.getProjectById(projectID);
+  }
+
+  @Patch(':projectID')
+  @UseGuards(ProjectExistsGuard)
+  updateProject(
+    @ProjectReq() project: ProjectDocument,
+    @Body() updateProjectDto: UpdateProjectDto) {
+    return this.projectsService.updateProject(project, updateProjectDto);
   }
         
   @Delete(':projectID')
