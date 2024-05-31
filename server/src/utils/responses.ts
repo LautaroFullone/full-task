@@ -1,18 +1,18 @@
 export class ResponseEntity<T> {
     
-    private data: T;
+    private records: T;
     private title: string;
     private message: string;
     private status: number;
 
     constructor() { }
 
-    setData(data: T): this {
-        this.data = data;
+    setRecords(records: T): this {
+        this.records = records;
         return this;
     }
 
-    setTitle(title: string): this {
+    setTitle(title: any): this {
         this.title = title;
         return this;
     }
@@ -29,7 +29,7 @@ export class ResponseEntity<T> {
 
     build(): ResponseEntity<T> {
         const response = new ResponseEntity<T>();
-        response.data = this.data;
+        response.records = this.records;
         response.title = this.title;
         response.message = this.message;
         response.status = this.status;

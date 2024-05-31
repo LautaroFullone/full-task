@@ -19,7 +19,7 @@ export class ProjectsService {
     const newProject = await this.projectModel.create(createProjectDto);
     
     return new ResponseEntity<Project>()
-      .setData(newProject)
+      .setRecords(newProject)
       .setTitle('createProject')
       .setMessage('Project was successfully created')
       .setStatus(200)
@@ -30,7 +30,7 @@ export class ProjectsService {
     const projectsList = await this.projectModel.find();
 
     return new ResponseEntity<Project[]>()
-      .setData(projectsList)
+      .setRecords(projectsList)
       .setTitle('getAllProjects')
       .setMessage('Projects were successfully found')
       .setStatus(200)
@@ -43,7 +43,7 @@ export class ProjectsService {
     if (!project) throw new NotFoundException(`Project with ID "${id}" not found`);
 
     return new ResponseEntity<Project>()
-      .setData(project)
+      .setRecords(project)
       .setTitle('getProjectById')
       .setMessage('Project was successfully found')
       .setStatus(200)
@@ -56,7 +56,7 @@ export class ProjectsService {
     if (!updatedProject) throw new NotFoundException(`Project with ID "${id}" not found`);
 
     return new ResponseEntity<Project>()
-      .setData(updatedProject)
+      .setRecords(updatedProject)
       .setTitle('updateProject')
       .setMessage('Project was updated')
       .setStatus(200)
@@ -69,7 +69,7 @@ export class ProjectsService {
     if (!deletedProject) throw new NotFoundException(`Project with ID "${id}" not found`);
 
     return new ResponseEntity<Project>()
-      .setData(deletedProject)
+      .setRecords(deletedProject)
       .setTitle('deleteProject')
       .setMessage('Project was successfully deleted')
       .setStatus(200)

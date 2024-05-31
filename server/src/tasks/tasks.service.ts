@@ -28,7 +28,7 @@ export class TasksService {
     await project.save();
     
     return new ResponseEntity<Task>()
-      .setData(newTask)
+      .setRecords(newTask)
       .setTitle('createTask')
       .setMessage('Tasks was successfully created')
       .setStatus(200)
@@ -40,10 +40,10 @@ export class TasksService {
     const tasksList = await this.taskModel.find({ project: project._id })
       .populate('project'); //se pone el nombre del campo
     
-    if(tasksList.length == 0) throw new EmptyListException('tasks');
+    //if(tasksList.length == 0) throw new EmptyListException('tasks');
     
     return new ResponseEntity<Task[]>()
-      .setData(tasksList)
+      .setRecords(tasksList)
       .setTitle('getAllTasksByProjectId')
       .setMessage('Tasks were successfully found')
       .setStatus(200)
@@ -53,7 +53,7 @@ export class TasksService {
   async getTaskById(task: TaskDocument): Promise<ResponseEntity<Task>>{
      
     return new ResponseEntity<Task>()
-      .setData(task)
+      .setRecords(task)
       .setTitle('getTaskById')
       .setMessage('Task was successfully found')
       .setStatus(200)
@@ -65,7 +65,7 @@ export class TasksService {
     const taskUpdated = await this.taskModel.findByIdAndUpdate(task._id, updateTaskDto, { new: true })
 
     return new ResponseEntity<Task>()
-      .setData(taskUpdated)
+      .setRecords(taskUpdated)
       .setTitle('updateTask')
       .setMessage('Task was updated')
       .setStatus(200)
@@ -79,7 +79,7 @@ export class TasksService {
     const taskUpdated = await task.save();
 
     return new ResponseEntity<Task>()
-      .setData(taskUpdated)
+      .setRecords(taskUpdated)
       .setTitle('updateTaskStatus')
       .setMessage('Task status was successfully updated')
       .setStatus(200)
@@ -96,7 +96,7 @@ export class TasksService {
     ]);
 
     return new ResponseEntity<Task>()
-      .setData(taskToDelete)
+      .setRecords(taskToDelete)
       .setTitle('deleteTask')
       .setMessage('Task was successfully deleted')
       .setStatus(200)
