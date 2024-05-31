@@ -10,12 +10,12 @@ export default function DashboardView() {
 
     const { data, isError, error, isLoading } = useQuery({
         queryKey: ['projects'],
-        queryFn: getAllProjects
+        queryFn: getAllProjects,
+        retry: 2
     })
 
     if(isLoading) return 'Cargando...'
     if (isError) return `Ocurrió un error al cargar los proyectos: ${error.message}`;
-
 
     if(data){ 
         const records = Array.isArray(data.records) ? data.records : [data.records];

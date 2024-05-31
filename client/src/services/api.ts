@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios";
 import { isAxiosError } from "axios";
-import { Project, ProjectFormData, responseEntitySchema } from "../types";
+import { Project, ProjectFormData, responseProjectSchema, responseProjectsListSchema } from "../types";
 
 export async function createProject(projectData: ProjectFormData){
     try {
@@ -21,7 +21,7 @@ export async function createProject(projectData: ProjectFormData){
 export async function getAllProjects() {
     try {
         const { data } = await api.get(`/projects`)
-        const response = responseEntitySchema.safeParse(data)
+        const response = responseProjectsListSchema.safeParse(data)
 
         if (!response.success) throw new Error('Error parsing response');
    
@@ -41,7 +41,7 @@ export async function getAllProjects() {
 export async function getProjectById(id: Project['_id']) {
     try {
         const { data } = await api.get(`/projects/${id}`)
-        const response = responseEntitySchema.safeParse(data);
+        const response = responseProjectSchema.safeParse(data);
 
         if (!response.success) throw new Error('Error parsing response');
 

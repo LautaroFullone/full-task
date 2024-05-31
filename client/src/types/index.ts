@@ -1,5 +1,6 @@
 import { z } from "zod"
 
+//---------------------<[ PROJECTS ]>---------------------
 export const projectSchema = z.object({ //para validar data en tiempo de ejecucion
     _id: z.string(),
     projectName: z.string(),
@@ -7,31 +8,32 @@ export const projectSchema = z.object({ //para validar data en tiempo de ejecuci
     description: z.string(),
 })
 
+export const projectsListSchema = z.array( //para validar data en tiempo de ejecucion
+    projectSchema.pick({
+        _id: true,
+        projectName: true,
+        clientName: true,
+        description: true
+    })
+)
+
 //creamos un type TS a traves del zod schema
-export type Project = z.infer<typeof projectSchema> 
+export type Project = z.infer<typeof projectSchema>
 //creamos otro type pero sin el ID
 export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'description'>
 
-export const responseEntitySchema = z.object({
+//---------------------<[ API ]>---------------------
+
+const responseEntitySchema = z.object({
     title: z.string(),
     message: z.string(),
     status: z.number(),
-    records: z.union([  //record puede ser un la lista de Projects o un unico project
-        z.array(
-            projectSchema.pick({
-                _id: true,
-                projectName: true,
-                clientName: true,
-                description: true,
-            })
-        ),
-        projectSchema.pick({
-            _id: true,
-            projectName: true,
-            clientName: true,
-            description: true,
-        })
-    ])
 })
 
-export type ResponseEntity = z.infer<typeof responseEntitySchema> 
+export const responseProjectSchema = responseEntitySchema.merge(
+    z.object({ records: projectSchema })
+)
+
+export const responseProjectsListSchema = responseEntitySchema.merge(
+    z.object({ records: z.array(projectSchema) })
+)
