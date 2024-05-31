@@ -14,6 +14,7 @@ export default function CreateProjectView() {
         description: ""
     }
 
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
     
     const mutation = useMutation({
@@ -26,7 +27,6 @@ export default function CreateProjectView() {
             toast.error(response.message)
         }
     })
-    const navigate = useNavigate();
 
     function onSubmit(data: ProjectFormData){ 
         mutation.mutate(data) 
