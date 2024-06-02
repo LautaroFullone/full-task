@@ -60,12 +60,27 @@ export async function getProjectById(id: Project['_id']) {
 
 export async function updateProject({ id, newData }: { id: Project['_id']; newData: ProjectFormData }) {
     try {
-        const { data } = await api.patch(`/projects/${id}`, newData)
-        
+        const { data } = await api.patch(`/projects/${id}`, newData)    
         return data;
-
+    
     } catch (error) {
         console.log('# ERROR: updateProject', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}
+
+export async function deleteProject(id: Project['_id']) {
+    try {
+        const { data } = await api.delete(`/projects/${id}`)
+        return data
+
+    } catch (error) {
+        console.log('# ERROR: getProjectById', error)
         if (isAxiosError(error) && error.response)
             throw new Error(error.response.data.message)
         else if (error instanceof Error)
