@@ -1,6 +1,6 @@
 import { Project, ProjectFormData } from "@/types/index";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProject } from "@/services/api";
 import { Link, useNavigate } from "react-router-dom";
 import ProjectForm from "./ProjectForm";
@@ -16,9 +16,12 @@ export default function EditProjectForm({ project, projectID }: EditProjectFormP
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: project })
 
+    const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationFn: updateProject,
         onSuccess: (response) => {
+            queryClient.invalidateQueries({ queryKey: ['projects'] }) //volver a ejecutar api call que estaba en cache
+            queryClient.invalidateQueries({ queryKey: ['editProject', projectID] })
             toast.success(response.message);
             navigate('/');
         },

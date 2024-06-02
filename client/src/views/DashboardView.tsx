@@ -15,11 +15,9 @@ export default function DashboardView() {
     })
 
     if(isLoading) return 'Cargando...'
-    if (isError) return `Ocurrió un error al cargar los proyectos: ${error.message}`;
+    if(isError) return `Ocurrió un error al cargar los proyectos: ${error.message}`;
 
     if(data){ 
-        const records = Array.isArray(data.records) ? data.records : [data.records];
-
         return (
             <>
                 <h1 className="text-5xl font-black">Mis Proyectos</h1>
@@ -33,7 +31,7 @@ export default function DashboardView() {
                 </nav>
 
                 {
-                    (records.length === 0) 
+                    (data.records.length === 0) 
                         ?   <p className="text-center py-20">
                                 No hay proyectos aun: {''}
                                 <Link to={'/projects/create'} 
@@ -43,7 +41,7 @@ export default function DashboardView() {
 
                             </p>
                         : <ul role="list" className="divide-y divide-gray-100 border border-gray-100 mt-10 bg-white shadow-lg">
-                            {records.map((project) => (
+                            {data.records.map((project) => (
                                 <li key={project._id} className="flex justify-between gap-x-6 px-5 py-10">
                                     <div className="flex min-w-0 gap-x-4">
                                         <div className="min-w-0 flex-auto space-y-2">
