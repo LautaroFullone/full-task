@@ -3,6 +3,7 @@ import AppLayout from './layouts/AppLayout'
 import DashboardView from './views/DashboardView'
 import CreateProjectView from './views/projects/CreateProjectView'
 import EditProjectView from './views/projects/EditProjectView'
+import DetailProjectView from './views/projects/DetailProjectView'
 
 export default function Router() {
     return (
@@ -11,6 +12,7 @@ export default function Router() {
                 <Route element={<AppLayout />}>
                     <Route path='/' element={<DashboardView />} index />
                     <Route path='/projects/create' element={<CreateProjectView />} />
+                    <Route path='/projects/:projectID' element={<DetailProjectView />} />
                     <Route path='/projects/:projectID/edit' element={<EditProjectView />} />
                 </Route>
             </Routes>
