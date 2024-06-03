@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import AppLayout from './layouts/AppLayout'
 import DashboardView from './views/DashboardView'
 import CreateProjectView from './views/projects/CreateProjectView'
@@ -14,6 +14,7 @@ export default function Router() {
                     <Route path='/projects/create' element={<CreateProjectView />} />
                     <Route path='/projects/:projectID' element={<DetailProjectView />} />
                     <Route path='/projects/:projectID/edit' element={<EditProjectView />} />
+                    <Route path='*' element={<Navigate to={'/'} />} />
                 </Route>
             </Routes>
         </BrowserRouter>
