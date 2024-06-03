@@ -1,14 +1,14 @@
 import { z } from "zod"
 
 //---------------------<[ PROJECTS ]>---------------------
-export const projectSchema = z.object({ //para validar data en tiempo de ejecucion
+export const projectSchema = z.object({ //para validar lo que envia la api
     _id: z.string(),
     projectName: z.string(),
     clientName: z.string(),
     description: z.string(),
 })
 
-export const projectsListSchema = z.array( //para validar data en tiempo de ejecucion
+export const projectsListSchema = z.array( 
     projectSchema.pick({
         _id: true,
         projectName: true,
@@ -17,12 +17,27 @@ export const projectsListSchema = z.array( //para validar data en tiempo de ejec
     })
 )
 
-//creamos un type TS a traves del zod schema
+//creamos un type TS a traves del schema
 export type Project = z.infer<typeof projectSchema>
 //creamos otro type pero sin el ID
 export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'description'>
 
-//---------------------<[ API ]>---------------------
+//---------------------<[ TASKS ]>---------------------
+
+export const taskStatusShema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed']) 
+
+export const taskSchema = z.object({ 
+    _id: z.string(),
+    taskName: z.string(),
+    description: z.string(),
+    status: taskStatusShema,
+    project: z.string(),
+})
+
+export type Task = z.infer<typeof taskSchema>
+export type TaskFormData = Pick<Task, 'taskName' | 'description'>
+
+//---------------------<[ RESPONSE ENTITY ]>---------------------
 
 const responseEntitySchema = z.object({
     title: z.string(),
