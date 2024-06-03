@@ -9,7 +9,7 @@ export class CreateTaskDto {
     @IsNotEmpty()
     description: string
 
-    @IsEnum(taskStatus)  //para mostrar las opciones aceptadas al momento de lanzar error
-    status: TaskStatus;
+    //@IsEnum(taskStatus)  //para mostrar las opciones aceptadas al momento de lanzar error
+    //status: TaskStatus;
 
 }

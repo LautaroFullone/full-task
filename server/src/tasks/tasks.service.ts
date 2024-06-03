@@ -21,12 +21,13 @@ export class TasksService {
   
   async createTask(project: ProjectDocument, createTaskDto: CreateTaskDto): Promise<ResponseEntity<Task>> {
     
-    const newTask = await this.taskModel.create({ ...createTaskDto, project });
+    const newTask = (await this.taskModel.create({ ...createTaskDto, project }))
+      .depopulate('project'); //no carga el campo 'project' con la data para evitar circular exception
 
     project.tasks = [...project.tasks, newTask] 
-    
+
     await project.save();
-    
+
     return new ResponseEntity<Task>()
       .setRecords(newTask)
       .setTitle('createTask')
@@ -37,8 +38,7 @@ export class TasksService {
   
   async getAllTasksByProjectId(project: ProjectDocument): Promise<ResponseEntity<Task[]>>{
     
-    const tasksList = await this.taskModel.find({ project: project._id })
-      .populate('project'); //se pone el nombre del campo
+    const tasksList = await this.taskModel.find({ project: project._id }) 
     
     //if(tasksList.length == 0) throw new EmptyListException('tasks');
     
