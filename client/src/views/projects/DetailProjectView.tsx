@@ -1,5 +1,5 @@
 import AddTaskModal from "@/components/tasks/AddTaskModal"
-import { getProjectById } from "@/services/api"
+import { getProjectById } from "@/services/ProjectApi"
 import { useQuery } from "@tanstack/react-query"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
@@ -9,7 +9,7 @@ export default function DetailProjectView() {
     const { projectID } = useParams()
 
     const { data, isError, isLoading } = useQuery({
-        queryKey: ['editProject', projectID], //para tener un identificador dinamico TODO: dsp de updatear muestra lo anterior
+        queryKey: ['editProject', projectID], //para tener un identificador dinamico
         queryFn: () => getProjectById(projectID!),
         retry: false,
     })
@@ -31,7 +31,7 @@ export default function DetailProjectView() {
                 </button>
             </nav>
 
-            <AddTaskModal />
+            <AddTaskModal projectID={projectID!}/>
         </>
     )
 }

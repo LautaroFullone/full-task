@@ -1,5 +1,5 @@
 import EditProjectForm from "@/components/projects/EditProjectForm"
-import { getProjectById } from "@/services/api"
+import { getProjectById } from "@/services/ProjectApi"
 import { useQuery } from "@tanstack/react-query"
 import { Navigate, useParams } from "react-router-dom"
 

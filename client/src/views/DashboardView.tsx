@@ -1,4 +1,4 @@
-import { deleteProject, getAllProjects } from "@/services/api";
+import { deleteProject, getAllProjects } from "@/services/ProjectApi";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Fragment } from 'react'
