@@ -1,11 +1,27 @@
 import { z } from "zod"
 
+//---------------------<[ TASKS ]>---------------------
+export const taskStatusShema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
+
+export const taskSchema = z.object({
+    _id: z.string(),
+    taskName: z.string(),
+    description: z.string(),
+    status: taskStatusShema,
+    project: z.string(),
+})
+
+export type Task = z.infer<typeof taskSchema>
+export type TaskFormData = Pick<Task, 'taskName' | 'description'>
+
+
 //---------------------<[ PROJECTS ]>---------------------
 export const projectSchema = z.object({ //para validar lo que envia la api
     _id: z.string(),
     projectName: z.string(),
     clientName: z.string(),
     description: z.string(),
+    tasks: z.array(taskSchema)
 })
 
 export const projectsListSchema = z.array( 
@@ -22,23 +38,8 @@ export type Project = z.infer<typeof projectSchema>
 //creamos otro type pero sin el ID
 export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'description'>
 
-//---------------------<[ TASKS ]>---------------------
-
-export const taskStatusShema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed']) 
-
-export const taskSchema = z.object({ 
-    _id: z.string(),
-    taskName: z.string(),
-    description: z.string(),
-    status: taskStatusShema,
-    project: z.string(),
-})
-
-export type Task = z.infer<typeof taskSchema>
-export type TaskFormData = Pick<Task, 'taskName' | 'description'>
 
 //---------------------<[ RESPONSE ENTITY ]>---------------------
-
 const responseEntitySchema = z.object({
     title: z.string(),
     message: z.string(),

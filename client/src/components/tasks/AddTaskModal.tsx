@@ -4,7 +4,7 @@ import { Fragment } from "react/jsx-runtime";
 import TaskForm from "./TaskForm";
 import { Project, TaskFormData } from "@/types/index";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "@/services/TaskApi";
 import { toast } from "react-toastify";
 
@@ -27,12 +27,14 @@ export default function AddTaskModal({ projectID }: AddTaskModalProps) {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues: initialValues })
 
+    const queryClient = useQueryClient();
+
     const mutation = useMutation({
         mutationFn: createTask,
         onSuccess: (response) => {
             toast.success(response.message);
-            reset()
-            closeModal()
+            reset(); closeModal();
+            queryClient.invalidateQueries({ queryKey: ['getProject', projectID] }) //volver a ejecutar api call que estaba en cache
         },
         onError: (response) => {
             toast.error(response.message)

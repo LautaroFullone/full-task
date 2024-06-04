@@ -27,7 +27,8 @@ export class ProjectsService {
   }
 
   async getAllProjects(): Promise<ResponseEntity<Project[]>> {
-    const projectsList = await this.projectModel.find();
+    const projectsList = await this.projectModel.find()
+      .populate('tasks');
 
     return new ResponseEntity<Project[]>()
       .setRecords(projectsList)

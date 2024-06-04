@@ -1,4 +1,5 @@
 import AddTaskModal from "@/components/tasks/AddTaskModal"
+import TasksList from "@/components/tasks/TasksList"
 import { getProjectById } from "@/services/ProjectApi"
 import { useQuery } from "@tanstack/react-query"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
@@ -9,7 +10,7 @@ export default function DetailProjectView() {
     const { projectID } = useParams()
 
     const { data, isError, isLoading } = useQuery({
-        queryKey: ['editProject', projectID], //para tener un identificador dinamico
+        queryKey: ['getProject', projectID], //para tener un identificador dinamico
         queryFn: () => getProjectById(projectID!),
         retry: false,
     })
@@ -30,6 +31,8 @@ export default function DetailProjectView() {
                     Agregar Tarea
                 </button>
             </nav>
+
+            <TasksList tasks={data.records.tasks}/>
 
             <AddTaskModal projectID={projectID!}/>
         </>
