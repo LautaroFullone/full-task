@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+export type FormActionsType = 'create' | 'edit';
+
 //---------------------<[ TASKS ]>---------------------
 export const taskStatusShema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
 

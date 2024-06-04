@@ -15,9 +15,9 @@ export default function DetailProjectView() {
         retry: false,
     })
 
-    if (isLoading) return 'Cargando...'
-    if (isError) return <Navigate to={'error'} />
-    if (data) return (
+    if(isLoading) return 'Cargando...'
+    if(isError) return <Navigate to={'error'} />
+    if(data) return (
         <>
             <h1 className="text-5xl font-black">{data.records.projectName}</h1>
             <p className="text-2xl font-light text-gray-500 mt-5">{data.records.description}</p>

@@ -48,21 +48,13 @@ export default function EditProjectForm({ project, projectID }: EditProjectFormP
                     </Link>
                 </nav>
 
-                <form onSubmit={handleSubmit(onSubmit)}
-                    className="mt-10 shadow-lg p-10 rounded-lg"
-                    noValidate
-                >
-                    <ProjectForm
-                        register={register}
-                        errors={errors}
-                    />
+                <ProjectForm
+                    handleSubmit={handleSubmit(onSubmit)}
+                    register={register}
+                    errors={errors}
+                    action="edit"
+                />
 
-                    <input type="submit"
-                        value="Guardar Cambios"
-                        className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white 
-                                uppercase font-bold cursor-pointer transition-colors" />
-
-                </form>
             </div>
         </>
     )

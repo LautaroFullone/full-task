@@ -88,18 +88,12 @@ export default function AddTaskModal({ projectID }: AddTaskModalProps) {
                                         <span className="text-fuchsia-600">una tarea</span>
                                     </p>
 
-                                    <form onSubmit={handleSubmit(onSubmit)}
-                                        className="mt-10 space-y-3" 
-                                        noValidate
-                                    >
-
-                                        <TaskForm register={register} errors={errors}/>
-
-                                        <input type="submit"
-                                            value="Guardar Tarea"
-                                            className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white 
-                                                uppercase font-bold cursor-pointer transition-colors" />
-                                    </form>
+                                    <TaskForm 
+                                        handleSubmit={handleSubmit(onSubmit)}
+                                        register={register}
+                                        errors={errors}
+                                        action="create" 
+                                    />
 
                                 </Dialog.Panel>
                             </Transition.Child>

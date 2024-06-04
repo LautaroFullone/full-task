@@ -44,22 +44,14 @@ export default function CreateProjectView() {
                         Volver a Proyectos
                     </Link>
                 </nav>
+                    
+                <ProjectForm 
+                    handleSubmit={handleSubmit(onSubmit)}
+                    register={register}
+                    errors={errors}
+                    action="create"
+                />
 
-                <form onSubmit={handleSubmit(onSubmit)}
-                    className="mt-10 shadow-lg p-10 rounded-lg"
-                    noValidate
-                >
-                    <ProjectForm 
-                        register={register}
-                        errors={errors}
-                    />
-
-                    <input type="submit"
-                        value="Crear Proyecto"
-                        className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white 
-                                uppercase font-bold cursor-pointer transition-colors" />
-
-                </form>
             </div>
         </>
     )
