@@ -6,12 +6,12 @@ import { Link, useNavigate } from "react-router-dom";
 import ProjectForm from "./ProjectForm";
 import { toast } from "react-toastify";
 
-interface EditProjectFormProps {
+interface ProjectEditorProps {
     project: ProjectFormData,
     projectID: Project['_id']
 }
 
-export default function EditProjectForm({ project, projectID }: EditProjectFormProps) {
+export default function ProjectEditor({ project, projectID }: ProjectEditorProps) {
 
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: project })

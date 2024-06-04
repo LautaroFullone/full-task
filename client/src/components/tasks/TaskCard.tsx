@@ -2,12 +2,16 @@ import { Task } from "@/types/index"
 import { Menu, Transition } from "@headlessui/react"
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { Fragment } from "react"
+import { useSearchParams } from "react-router-dom"
 
 interface TaskCardTProps {
     task: Task
 }
 
 export default function TaskCard({ task }: TaskCardTProps) {
+
+    const [_, setSearchParams] = useSearchParams();
+
     return (
         <li className="p-5 bg-white border border-slate-300 flex justify-between gap-3">
 
@@ -35,7 +39,7 @@ export default function TaskCard({ task }: TaskCardTProps) {
                                 </button>
                             </Menu.Item>
                             <Menu.Item>
-                                <button type='button' className='block px-3 py-1 text-sm leading-6 text-gray-900'>
+                                <button type='button' onClick={() => setSearchParams({ editTask: task._id})} className='block px-3 py-1 text-sm leading-6 text-gray-900'>
                                     Editar Tarea
                                 </button>
                             </Menu.Item>

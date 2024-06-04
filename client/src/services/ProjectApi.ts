@@ -58,7 +58,7 @@ export async function getProjectById(id: Project['_id']) {
     }
 }
 
-export async function updateProject({ id, newData }: { id: Project['_id']; newData: ProjectFormData }) {
+export async function updateProject({ id, newData }: { id: Project['_id'], newData: ProjectFormData }) {
     try {
         const { data } = await api.patch(`/projects/${id}`, newData)    
         return data;

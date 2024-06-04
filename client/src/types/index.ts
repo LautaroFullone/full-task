@@ -55,3 +55,11 @@ export const responseProjectSchema = responseEntitySchema.merge(
 export const responseProjectsListSchema = responseEntitySchema.merge(
     z.object({ records: z.array(projectSchema) })
 )
+
+export const responseTaskSchema = responseEntitySchema.merge(
+    z.object({ records: taskSchema })
+)
+
+export const responseTasksListSchema = responseEntitySchema.merge(
+    z.object({ records: z.array(taskSchema) })
+)

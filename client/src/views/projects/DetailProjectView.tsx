@@ -1,4 +1,5 @@
 import AddTaskModal from "@/components/tasks/AddTaskModal"
+import TaskEditorShield from "@/components/tasks/TaskEditorShield"
 import TasksList from "@/components/tasks/TasksList"
 import { getProjectById } from "@/services/ProjectApi"
 import { useQuery } from "@tanstack/react-query"
@@ -35,6 +36,8 @@ export default function DetailProjectView() {
             <TasksList tasks={data.records.tasks}/>
 
             <AddTaskModal projectID={projectID!}/>
+
+            <TaskEditorShield projectID={projectID!} />
         </>
     )
 }

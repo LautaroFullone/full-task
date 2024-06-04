@@ -25,7 +25,7 @@ export class TaskExistsGuard implements CanActivate {
     if (!project) throw new NotFoundException(`Project is missing in request`);
 
     //si la task no pertenece al project enviado, lanza error
-    if (task.project._id.toString() !== project._id.toString())
+    if (task.project.toString() !== project._id.toString())
       throw new InvalidRelationshipException;
 
     req.task = task;
