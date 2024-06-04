@@ -23,11 +23,11 @@ export class Task {
     @Prop({ required: true, trim: true })
     description: string;
 
-    @Prop({ type: Types.ObjectId, ref: 'Project' })
-    project: ProjectDocument;
-
     @Prop({ required: true, enum: Object.values(taskStatus), default: taskStatus.PENDING })
     status: TaskStatus;
+
+    @Prop({ type: Types.ObjectId, ref: 'Project' })
+    project: ProjectDocument;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

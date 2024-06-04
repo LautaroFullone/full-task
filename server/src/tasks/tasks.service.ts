@@ -2,8 +2,8 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { EmptyListException } from 'src/utils/exceptions/empty-list.exception';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { ProjectDocument } from 'src/projects/model/project.schema';
+import { Model, Types } from 'mongoose';
+import { Project, ProjectDocument } from 'src/projects/model/project.schema';
 import { ResponseEntity } from 'src/utils/responses';
 import { Task, TaskDocument } from './model/task.schema';
 import { InvalidRelationshipException } from 'src/utils/exceptions/invalid-relationship.exception';
@@ -17,16 +17,14 @@ interface ModelExt<T> extends Model<T> {
 @Injectable()
 export class TasksService {
   
-  constructor(@InjectModel(Task.name) private readonly taskModel: ModelExt<TaskDocument>) { }
+  constructor(@InjectModel(Task.name) private readonly taskModel: ModelExt<TaskDocument>,
+              @InjectModel(Project.name) private readonly projectModel: ModelExt<TaskDocument>) { }
   
   async createTask(project: ProjectDocument, createTaskDto: CreateTaskDto): Promise<ResponseEntity<Task>> {
-    
+   
     const newTask = (await this.taskModel.create({ ...createTaskDto, project }))
-      .depopulate('project'); //no carga el campo 'project' con la data para evitar circular exception
-
-    project.tasks = [...project.tasks, newTask] 
-
-    await project.save();
+    
+    await this.projectModel.findByIdAndUpdate(project._id, { tasks: [...project.tasks, newTask._id as Types.ObjectId] })
 
     return new ResponseEntity<Task>()
       .setRecords(newTask)

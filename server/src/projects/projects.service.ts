@@ -38,7 +38,8 @@ export class ProjectsService {
   }
 
   async getProjectById(id: string): Promise<ResponseEntity<Project>> {
-    const project = await this.projectModel.findById(id).populate('tasks');
+    const project = await this.projectModel.findById(id)
+      .populate('tasks');
     
     if (!project) throw new NotFoundException(`Project with ID "${id}" not found`);
 
