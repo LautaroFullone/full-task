@@ -44,11 +44,9 @@ export class AuthService {
         const check = await compareHash(loginData.password, userExist.password)
         if (!check) throw new ForbiddenException('Contraseña incorrecta');
 
-        const { password, ...userWithOutPass } = userExist.toObject();
-
         //esto es lo que mando a codificar al token, info a la que accedo dsp en jwt.strategy !!
         const payload = {
-            id: userWithOutPass._id,
+            id: userExist._id,
         }
 
         const token = this.jwtService.sign(payload)

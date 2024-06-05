@@ -1,7 +1,10 @@
 import ErrorMessage from '@/components/ErrorMessage'
+import { loginAccount } from '@/services/AuthApi'
 import { LoginFormData } from '@/types/index'
+import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export default function LoginView() {
     
@@ -12,9 +15,16 @@ export default function LoginView() {
 
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
 
-    function onSubmit(formData: LoginFormData){
+    const mutation = useMutation({
+        mutationFn: loginAccount,
+        onSuccess: (response) => {
+            toast.success(response.message)
+        }
+    })
 
-     }
+    function onSubmit(formData: LoginFormData){
+        mutation.mutate(formData)
+    }
 
     return (
         <>

@@ -3,7 +3,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 import { RegisterFormData } from "@/types/index";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { createAccount } from "@/services/AuthApi";
+import { registerAccount } from "@/services/AuthApi";
 import { toast } from "react-toastify";
 
 export default function RegisterView() {
@@ -19,7 +19,7 @@ export default function RegisterView() {
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<RegisterFormData>({ defaultValues: initialValues });
 
     const mutation = useMutation({
-        mutationFn: createAccount,
+        mutationFn: registerAccount,
         onSuccess: (response) => {
             toast.success(response.message);
             navigate('/');
