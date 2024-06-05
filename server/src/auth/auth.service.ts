@@ -20,7 +20,7 @@ export class AuthService {
     
 
     async handleRegister(registerData: RegisterAuthDto): Promise<ResponseEntity<User>> { 
-        
+       
         const userExist = await this.userModel.findOne({ email: registerData.email });
         if (userExist) throw new ConflictException('Ya existe un usuario registrado con ese email');
         

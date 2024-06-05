@@ -2,6 +2,18 @@ import { z } from "zod"
 
 export type FormActionsType = 'create' | 'edit';
 
+//---------------------<[ AUTH ]>---------------------
+export const authSchema = z.object({
+    name: z.string(),
+    email: z.string(),
+    password: z.string(),
+    passwordConfirmation: z.string()
+})
+
+export type Auth = z.infer<typeof authSchema>
+export type LoginFormData = Pick<Auth, 'email' | 'password'>
+export type RegisterFormData = Pick<Auth, 'name' | 'email' | 'password' | 'passwordConfirmation'>
+
 //---------------------<[ TASKS ]>---------------------
 export const taskStatusShema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
 export type TaskStatus = z.infer<typeof taskStatusShema>
@@ -19,7 +31,6 @@ export const taskSchema = z.object({
 
 export type Task = z.infer<typeof taskSchema>
 export type TaskFormData = Pick<Task, 'taskName' | 'description'>
-
 
 //---------------------<[ PROJECTS ]>---------------------
 export const projectSchema = z.object({ //para validar lo que envia la api
@@ -43,7 +54,6 @@ export const projectsListSchema = z.array(
 export type Project = z.infer<typeof projectSchema>
 //creamos otro type pero sin el ID
 export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'description'>
-
 
 //---------------------<[ RESPONSE ENTITY ]>---------------------
 const responseEntitySchema = z.object({
