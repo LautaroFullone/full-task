@@ -13,6 +13,7 @@
       "@/services/*": ["services/*"],
       "@/types/*": ["types/*"],
       "@/lib/*": ["lib/*"],
+      "@/utils/*": ["utils/*"],
     },
 
     /* Bundler mode */

@@ -22,7 +22,9 @@ export default function TaskEditorShield({ projectID }: TaskEditorShieldProps) {
         
     if(isError) return <Navigate to={'error'} />
     if(data){
-        const { _id, project, status, ...taskData } = data.records; //solo envio taskname y description (workarround para no sobrescribir el project id como string)
+        //solo envio taskname y description (workarround para no sobrescribir el project id como string)
+        const { _id, project, status, createdAt, updatedAt, ...taskData } = data.records; 
+
         return <TaskEditor task={taskData} taskID={editTaskID!} projectID={projectID!} />
     } 
         
