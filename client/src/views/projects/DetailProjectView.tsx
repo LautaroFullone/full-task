@@ -1,4 +1,5 @@
 import TaskCreateModal from "@/components/tasks/TaskCreateModal"
+import TaskDetailModal from "@/components/tasks/TaskDetailModal"
 import TaskEditorShield from "@/components/tasks/TaskEditorShield"
 import TasksList from "@/components/tasks/TasksList"
 import { getProjectById } from "@/services/ProjectApi"
@@ -35,9 +36,11 @@ export default function DetailProjectView() {
 
             <TasksList tasks={data.records.tasks} projectID={projectID!} />
 
-            <TaskCreateModal projectID={projectID!}/>
+            <TaskCreateModal projectID={projectID!} />
 
             <TaskEditorShield projectID={projectID!} />
+
+            <TaskDetailModal projectID={projectID!} />
 
         </>
     )
