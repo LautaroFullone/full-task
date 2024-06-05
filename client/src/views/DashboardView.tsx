@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 export default function DashboardView() {
 
     const { data, isError, error, isLoading } = useQuery({
-        queryKey: ['projects'],
+        queryKey: ['getAllProjects'],
         queryFn: getAllProjects,
         retry: 2
     })
@@ -20,7 +20,7 @@ export default function DashboardView() {
     const { mutate } = useMutation({
         mutationFn: deleteProject,
         onSuccess: (response) => {
-            queryClient.invalidateQueries({ queryKey: ['projects'] })
+            queryClient.invalidateQueries({ queryKey: ['getAllProjects'] })
             toast.success(response.message);
         },
         onError: (response) => {

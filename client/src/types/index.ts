@@ -4,6 +4,8 @@ export type FormActionsType = 'create' | 'edit';
 
 //---------------------<[ TASKS ]>---------------------
 export const taskStatusShema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
+export type TaskStatus = z.infer<typeof taskStatusShema>
+
 
 export const taskSchema = z.object({
     _id: z.string(),

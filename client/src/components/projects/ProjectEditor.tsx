@@ -21,7 +21,7 @@ export default function ProjectEditor({ project, projectID }: ProjectEditorProps
     const mutation = useMutation({
         mutationFn: updateProject,
         onSuccess: (response) => {
-            queryClient.invalidateQueries({ queryKey: ['projects'] }) //volver a ejecutar api call que estaba en cache
+            queryClient.invalidateQueries({ queryKey: ['getAllProjects'] }) //volver a ejecutar api call que estaba en cache
             queryClient.invalidateQueries({ queryKey: ['editProject', projectID] })
             toast.success(response.message);
             navigate('/');

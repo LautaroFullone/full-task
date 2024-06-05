@@ -1,11 +1,7 @@
 import { FormActionsType, TaskFormData } from "@/types/index"
 import ErrorMessage from "../ErrorMessage"
 import { FieldErrors, UseFormHandleSubmit, UseFormRegister } from "react-hook-form"
-
-const buttonTranslations: { [key: string]: string } = {
-    create: 'Crear Tarea',
-    edit: 'Editar Tarea',
-}
+import { buttonTranslations } from "@/locales/es"
 
 type TaskFormProps = {
     errors: FieldErrors<TaskFormData>
@@ -59,7 +55,7 @@ export default function TaskForm({ errors, register, handleSubmit, action }: Tas
                 </div>
 
                 <input type="submit"
-                    value={buttonTranslations[action]}
+                    value={`${buttonTranslations[action]} Tarea`}
                     className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white 
                                                 uppercase font-bold cursor-pointer transition-colors" />
             </form>

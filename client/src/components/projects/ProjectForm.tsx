@@ -1,11 +1,8 @@
 import { FieldErrors, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
 import { FormActionsType, ProjectFormData } from "types";
+import { buttonTranslations } from "@/locales/es";
 
-const buttonTranslations: { [key: string]: string } = {
-    create: 'Crear Proyecto',
-    edit: 'Editar Proyecto',
-}
 interface ProjectFormProps {
     register: UseFormRegister<ProjectFormData>
     errors: FieldErrors<ProjectFormData>
@@ -75,7 +72,7 @@ export default function ProjectForm({ register, errors, handleSubmit, action }: 
                 </div>
 
                 <input type="submit"
-                    value={buttonTranslations[action]}
+                    value={`${buttonTranslations[action]} Proyecto`}
                     className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white 
                                 uppercase font-bold cursor-pointer transition-colors" />
 
