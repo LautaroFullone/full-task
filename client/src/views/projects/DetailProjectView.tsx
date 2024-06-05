@@ -1,4 +1,4 @@
-import AddTaskModal from "@/components/tasks/AddTaskModal"
+import TaskCreateModal from "@/components/tasks/TaskCreateModal"
 import TaskEditorShield from "@/components/tasks/TaskEditorShield"
 import TasksList from "@/components/tasks/TasksList"
 import { getProjectById } from "@/services/ProjectApi"
@@ -33,11 +33,12 @@ export default function DetailProjectView() {
                 </button>
             </nav>
 
-            <TasksList tasks={data.records.tasks}/>
+            <TasksList tasks={data.records.tasks} projectID={projectID!} />
 
-            <AddTaskModal projectID={projectID!}/>
+            <TaskCreateModal projectID={projectID!}/>
 
             <TaskEditorShield projectID={projectID!} />
+
         </>
     )
 }

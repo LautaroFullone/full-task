@@ -54,3 +54,19 @@ export async function updateTask({ projectID, taskID, newData }: { projectID: Pr
             throw new Error('An unknown error has ocurred')
     }
 }
+
+export async function deleteTask({ projectID, taskID }: { projectID: Project['_id'], taskID: Task['_id'] }) {
+    try {
+        const { data } = await api.delete(`/projects/${projectID}/tasks/${taskID}`)
+        return data
+
+    } catch (error) {
+        console.log('# ERROR: deleteTask', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}

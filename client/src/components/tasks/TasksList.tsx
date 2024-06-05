@@ -1,4 +1,4 @@
-import { Task } from '@/types/index'
+import { Project, Task } from '@/types/index'
 import TaskCard from './TaskCard'
 
 type GroupedTasks = {
@@ -30,9 +30,10 @@ const statusColors: { [key: string]: string } = {
 }
 
 interface TasksListProps {
-    tasks: Task[]
+    tasks: Task[],
+    projectID: Project['_id']
 }
-export default function TasksList({ tasks }: TasksListProps) {
+export default function TasksList({ tasks, projectID }: TasksListProps) {
 
     const groupedTasks = tasks.reduce((acc, task) => {
         let currentGroup = acc[task.status] ? [...acc[task.status]] : [];
@@ -60,7 +61,7 @@ export default function TasksList({ tasks }: TasksListProps) {
                                 {
                                     tasks.length === 0 
                                         ? <li className="text-gray-500 text-center pt-3">No Hay tareas</li>
-                                        : tasks.map(task => <TaskCard key={task._id} task={task} />)
+                                        : tasks.map(task => <TaskCard key={task._id} task={task} projectID={projectID} />)
                                 }
                             </ul>
 

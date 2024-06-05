@@ -8,11 +8,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "@/services/TaskApi";
 import { toast } from "react-toastify";
 
-interface AddTaskModalProps{
+interface TaskCreateModalProps{
     projectID: Project['_id']
 }
 
-export default function AddTaskModal({ projectID }: AddTaskModalProps) {
+export default function TaskCreateModal({ projectID }: TaskCreateModalProps) {
 
     const location = useLocation();
     const navigate = useNavigate();

@@ -80,7 +80,7 @@ export async function deleteProject(id: Project['_id']) {
         return data
 
     } catch (error) {
-        console.log('# ERROR: getProjectById', error)
+        console.log('# ERROR: deleteProject', error)
         if (isAxiosError(error) && error.response)
             throw new Error(error.response.data.message)
         else if (error instanceof Error)
