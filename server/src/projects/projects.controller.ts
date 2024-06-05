@@ -14,7 +14,9 @@ import { TaskDocument } from 'src/tasks/model/task.schema';
 import { TaskExistsGuard } from 'src/guards/task-exists/task-exists.guard';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { UserAutenticatedGuard } from 'src/guards/user-autenticated/user-autenticated.guard';
 
+@UseGuards(UserAutenticatedGuard)
 @Controller('projects')
 export class ProjectsController {
   
