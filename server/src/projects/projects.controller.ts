@@ -4,7 +4,7 @@ import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
 import { ObjectIdPipe } from 'src/utils/pipes/object-id/object-id.pipe';
 import { ProjectExistsGuard } from 'src/guards/project-exists/project-exists.guard';
 import { ProjectsService } from './projects.service';
-import { RequestWithProyectValue } from 'src/middlewares/validate-project-exists.middleware';
+import { RequestWithProyectValue } from 'src/utils/middlewares/validate-project-exists.middleware';
 import { TasksService } from 'src/tasks/tasks.service';
 import { UpdateTaskStatusDto } from 'src/tasks/dto/update-task-status.dto';
 import { ProjectDocument } from './model/project.schema';

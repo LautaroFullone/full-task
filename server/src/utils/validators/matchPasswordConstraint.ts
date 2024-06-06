@@ -1,5 +1,5 @@
 import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments } from 'class-validator';
-import { RegisterAuthDto } from 'src/dto/register-auth.dto';
+import { RegisterAuthDto } from 'src/auth/dto/register-auth.dto';
 
 @ValidatorConstraint({ name: 'matchPassword', async: false })
 export class MatchPasswordConstraint implements ValidatorConstraintInterface {

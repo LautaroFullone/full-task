@@ -1,8 +1,8 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { LoginAuthDto } from 'src/dto/login-auth.dto';
-import { RegisterAuthDto } from 'src/dto/register-auth.dto';
+import { LoginAuthDto } from 'src/auth/dto/login-auth.dto';
+import { RegisterAuthDto } from 'src/auth/dto/register-auth.dto';
 import { User, UserDocument } from 'src/users/model/user.schema';
 import { ResponseEntity } from 'src/utils/responses';
 import { JwtService } from '@nestjs/jwt';
