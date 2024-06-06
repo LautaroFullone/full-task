@@ -8,8 +8,8 @@ export class EventMailModule {
 
     constructor(private readonly mailService: MailerService) { }
 
-    @OnEvent('user.register')
-    handleRegistationCodeSending({user, code}: {user: UserDocument, code: string}) {
+    @OnEvent('registerCode.mail')
+    handleRegistationCodeSending({ user, code }: { user: UserDocument, code: string }) {
 
         this.mailService.sendMail({
             to: user.email,

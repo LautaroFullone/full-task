@@ -34,7 +34,7 @@ export class AuthService {
         
         const registerCode = await this.registerCodeModel.create({ code: generateRegisterCode(), user: newUser })
 
-        this.eventEmitter.emit('user.register', { user: newUser, code: registerCode.code})
+        this.eventEmitter.emit('registerCode.mail', { user: newUser, code: registerCode.code})
 
         return new ResponseEntity<User>()
             .setRecords(newUser)
@@ -93,7 +93,7 @@ export class AuthService {
 
         const registerCode = await this.registerCodeModel.create({ code: generateRegisterCode(), user: userExist })
 
-        this.eventEmitter.emit('user.register', { user: userExist, code: registerCode.code })
+        this.eventEmitter.emit('registerCode.mail', { user: userExist, code: registerCode.code })
 
         return new ResponseEntity<User>()
             .setRecords(userExist)

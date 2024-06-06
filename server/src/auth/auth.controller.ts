@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { RegisterAuthDto } from 'src/auth/dto/register-auth.dto';
 import { LoginAuthDto } from 'src/auth/dto/login-auth.dto';
 import { RegisterCodeDto } from '../register-codes/dto/register-code.dto';
+import { RequestCodeAuthDto } from './dto/request-code-auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +26,7 @@ export class AuthController {
     }
 
     @Post('request-code')
-    requestRegisterCode(@Body() registerBody: RegisterAuthDto) {
-        return this.authService.requestRegisterCode('email');
+    requestRegisterCode(@Body() requestCode: RequestCodeAuthDto) {
+        return this.authService.requestRegisterCode(requestCode.email);
     }
  }

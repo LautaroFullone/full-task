@@ -13,6 +13,7 @@ export const authSchema = z.object({
 export type Auth = z.infer<typeof authSchema>
 export type LoginFormData = Pick<Auth, 'email' | 'password'>
 export type RegisterFormData = Pick<Auth, 'name' | 'email' | 'password' | 'passwordConfirmation'>
+export type RequestRegisterCodeForm = Pick<Auth, 'email'>
 
 //---------------------<[ TASKS ]>---------------------
 export const taskStatusShema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
