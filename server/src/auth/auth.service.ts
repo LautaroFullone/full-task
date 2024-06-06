@@ -39,7 +39,7 @@ export class AuthService {
         return new ResponseEntity<User>()
             .setRecords(newUser)
             .setTitle('handleRegister')
-            .setMessage('Usuario registrado correctamente')
+            .setMessage('Usuario registrado correctamente, revise su correo!')
             .setStatus(201)
             .build();
     }

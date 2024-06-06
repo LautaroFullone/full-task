@@ -22,7 +22,7 @@ export default function RegisterView() {
         mutationFn: registerAccount,
         onSuccess: (response) => {
             toast.success(response.message);
-            navigate('/');
+            reset();
         },
         onError: (response) => {
             toast.error(response.message)

@@ -17,6 +17,7 @@ export class EventMailModule {
             template: 'token-template',
             context: {
                 name: user.name,
+                url: `${process.env.FRONTEND_URL}/auth/confirm-account`,
                 token
             }
         }).then(() => {

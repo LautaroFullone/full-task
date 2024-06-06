@@ -35,3 +35,19 @@ export async function loginAccount(formData: LoginFormData){
             throw new Error('An unknown error has ocurred')
     }
 }
+
+export async function confirmAccount(token: string) {
+    try {
+        const { data } = await api.post(`/auth/confirm-account`, { token })
+        return data;
+
+    } catch (error) {
+        console.log('# ERROR: confirmAccount', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to FullTask</title>
+    <title>Bienvenido a FullTask!</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,6 +45,21 @@
             color: #777777;
             padding-top: 0px;
         }
+
+        .button {
+            background-color: rgb(217, 70, 239);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 20px 0;
+            margin-top: 0;
+        }
+
+        .button:hover {
+            background-color: rgb(184, 60, 202);
+        }
     </style>
 </head>
 
@@ -55,8 +70,11 @@
         </div>
         <div class="content">
             <p>Hola {{name}}!</p>
-            <p>Gracias por registrarte en nuestra app. Porfavor copia el siguiente codigo de verificacion para confirmar la creacion de tu nueva cuenta:</p>
-            <p class="important"> {{token}}</p>
+            <p>Gracias por registrarte en nuestra app. Porfavor copia el siguiente codigo 
+                de verificacion para confirmar tu cuenta:</p>
+            <p class="important">{{token}}</p>
+            <p>Recuerda que este codigo expira dentro de 10 minutos</p>
+            <a href="{{url}}" class="button" target="_blank">Confirmar Cuenta</a>
             <p>Si no creaste ninguna cuenta, desestima este mensaje.</p>
         </div>
         <div class="footer">
