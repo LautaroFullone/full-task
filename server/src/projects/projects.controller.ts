@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } fro
 import { CreateProjectDto } from '../projects/dto/create-project.dto';
 import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
 import { ObjectIdPipe } from 'src/utils/pipes/object-id/object-id.pipe';
-import { ProjectExistsGuard } from 'src/guards/project-exists/project-exists.guard';
+import { ProjectExistsGuard } from 'src/utils/guards/project-exists/project-exists.guard';
 import { ProjectsService } from './projects.service';
 import { RequestWithProyectValue } from 'src/utils/middlewares/validate-project-exists.middleware';
 import { TasksService } from 'src/tasks/tasks.service';
@@ -11,10 +11,10 @@ import { ProjectDocument } from './model/project.schema';
 import { ProjectReq } from 'src/utils/decorators/project-req/project-req.decorator';
 import { TaskReq } from 'src/utils/decorators/task-req/task-req.decorator';
 import { TaskDocument } from 'src/tasks/model/task.schema';
-import { TaskExistsGuard } from 'src/guards/task-exists/task-exists.guard';
+import { TaskExistsGuard } from 'src/utils/guards/task-exists/task-exists.guard';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { UserAutenticatedGuard } from 'src/guards/user-autenticated/user-autenticated.guard';
+import { UserAutenticatedGuard } from 'src/utils/guards/user-autenticated/user-autenticated.guard';
 
 @UseGuards(UserAutenticatedGuard)
 @Controller('projects')
