@@ -21,7 +21,6 @@ export async function registerAccount(formData: RegisterFormData){
 export async function loginAccount(formData: LoginFormData){
     try {
         const { data } = await api.post(`/auth/login`, formData)
-        console.log('token', data.records.token)
         localStorage.setItem('AUTH_TOKEN', data.records.token)
         return data;
 
@@ -36,9 +35,9 @@ export async function loginAccount(formData: LoginFormData){
     }
 }
 
-export async function confirmAccount(token: string) {
+export async function confirmAccount(registerCode: string) {
     try {
-        const { data } = await api.post(`/auth/confirm-account`, { token })
+        const { data } = await api.post(`/auth/confirm-account`, { registerCode })
         return data;
 
     } catch (error) {

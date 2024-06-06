@@ -7,10 +7,10 @@ import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { RegisterTokensModule } from './register-tokens/register-tokens.module';
 import { MailModule } from './mail/mail.module';
 import { EventMailModule } from './mail/event-mail.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { RegisterCodesModule } from './register-codes/register-codes.module';
 
 @Module({
   imports: [
@@ -21,9 +21,9 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     TasksModule,
     UsersModule,
     AuthModule,
-    RegisterTokensModule,
     MailModule,
-    EventMailModule
+    EventMailModule,
+    RegisterCodesModule
   ],
   controllers: [AppController],
   providers: [AppService],

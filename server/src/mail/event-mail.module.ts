@@ -9,16 +9,16 @@ export class EventMailModule {
     constructor(private readonly mailService: MailerService) { }
 
     @OnEvent('user.register')
-    handleRegistationTokenSending({user, token}: {user: UserDocument, token: string}) {
+    handleRegistationCodeSending({user, code}: {user: UserDocument, code: string}) {
 
         this.mailService.sendMail({
             to: user.email,
             subject: 'FullTask: Verificacion de nueva cuenta',
-            template: 'token-template',
+            template: 'code-template',
             context: {
                 name: user.name,
                 url: `${process.env.FRONTEND_URL}/auth/confirm-account`,
-                token
+                code
             }
         }).then(() => {
             console.log('Mail sent successfully');

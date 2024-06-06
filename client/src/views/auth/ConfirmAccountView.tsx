@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 export default function ConfirmAccountView() {
 
-    const [token, setToken] = useState('')
+    const [code, setCode] = useState('')
 
     const mutation = useMutation({
         mutationFn: confirmAccount,
@@ -19,8 +19,8 @@ export default function ConfirmAccountView() {
         }
     })
 
-    function handleComplete(token: string){
-        mutation.mutate(token)
+    function handleComplete(code: string){
+        mutation.mutate(code)
     }
     
     return (
@@ -36,7 +36,7 @@ export default function ConfirmAccountView() {
                     Código de 6 dígitos
                 </label>
                 <div className="flex justify-center gap-5">
-                    <PinInput value={token} onChange={setToken} onComplete={handleComplete}>
+                    <PinInput value={code} onChange={setCode} onComplete={handleComplete}>
                         <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"/>
                         <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"/>
                         <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"/>
@@ -48,7 +48,7 @@ export default function ConfirmAccountView() {
             </form>
 
             <nav className="mt-10 flex flex-col space-y-4">
-                <Link to='/auth/new-code' className="text-center text-gray-300 font-normal">
+                <Link to='/auth/request-code' className="text-center text-gray-300 font-normal">
                     Solicitar un nuevo Código
                 </Link>
             </nav>

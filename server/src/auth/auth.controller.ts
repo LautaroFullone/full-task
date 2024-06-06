@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterAuthDto } from 'src/auth/dto/register-auth.dto';
 import { LoginAuthDto } from 'src/auth/dto/login-auth.dto';
-import { RegistrationTokenDto } from './dto/registration-token-auth.dto';
+import { RegisterCodeDto } from '../register-codes/dto/register-code.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,16 +11,21 @@ export class AuthController {
 
     @Post('register')
     register(@Body() registerBody: RegisterAuthDto) {
-        return this.authService.handleRegister(registerBody);
+        return this.authService.register(registerBody);
     }
 
     @Post('login')
     login(@Body() loginBody: LoginAuthDto) {
-        return this.authService.handleLogin(loginBody);
+        return this.authService.login(loginBody);
     }
 
     @Post('confirm-account')
-    confirmAccount(@Body() registrationToken: RegistrationTokenDto) {
-        return this.authService.confirmAccount(registrationToken.token);
+    confirmAccount(@Body() registerCode: RegisterCodeDto) {
+        return this.authService.confirmAccount(registerCode.code);
     }
-}
+
+    @Post('request-code')
+    requestRegisterCode(@Body() registerBody: RegisterAuthDto) {
+        return this.authService.requestRegisterCode('email');
+    }
+ }

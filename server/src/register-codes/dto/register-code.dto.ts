@@ -1,8 +1,8 @@
 import { IsNotEmpty } from "class-validator";
 
-export class RegistrationTokenDto {
+export class RegisterCodeDto {
 
     @IsNotEmpty()
-    token: string
+    code: string
 
 }

@@ -7,9 +7,9 @@ import { User, UserDocument } from 'src/users/model/user.schema';
 import { ResponseEntity } from 'src/utils/responses';
 import { JwtService } from '@nestjs/jwt';
 import { compareHash, generateHash } from 'src/utils/scripts/hashHandling';
-import { generateRegisterToken } from 'src/utils/scripts/tokenCreation';
-import { RegisterToken } from 'src/register-tokens/model/register-token.entity';
+import { generateRegisterCode } from 'src/utils/scripts/registerCodeGenerator';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { RegisterCode } from 'src/register-codes/model/register-code.schema';
 
 type Token = {
     token: string
@@ -21,9 +21,9 @@ export class AuthService {
     constructor(private readonly jwtService: JwtService, 
                 private readonly eventEmitter: EventEmitter2,
                 @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-                @InjectModel(RegisterToken.name) private readonly registerTokenModel: Model<RegisterToken>) { }
+                @InjectModel(RegisterCode.name) private readonly registerCodeModel: Model<RegisterCode>) { }
     
-    async handleRegister(registerData: RegisterAuthDto): Promise<ResponseEntity<User>> { 
+    async register(registerData: RegisterAuthDto): Promise<ResponseEntity<User>> { 
        
         const userExist = await this.userModel.findOne({ email: registerData.email });
         if (userExist) throw new ConflictException('Ya existe un usuario registrado con ese email');
@@ -32,9 +32,9 @@ export class AuthService {
         
         const newUser = await this.userModel.create({ ...registerData, password: cryptPass })
         
-        const registrationToken = await this.registerTokenModel.create({ token: generateRegisterToken(), user: newUser })
+        const registerCode = await this.registerCodeModel.create({ code: generateRegisterCode(), user: newUser })
 
-        this.eventEmitter.emit('user.register', { user: newUser, token: registrationToken.token})
+        this.eventEmitter.emit('user.register', { user: newUser, code: registerCode.code})
 
         return new ResponseEntity<User>()
             .setRecords(newUser)
@@ -44,7 +44,7 @@ export class AuthService {
             .build();
     }
 
-    async handleLogin(loginData: LoginAuthDto): Promise<ResponseEntity<Token>> {
+    async login(loginData: LoginAuthDto): Promise<ResponseEntity<Token>> {
         
         const userExist = await this.userModel.findOne({ email: loginData.email });
         if (!userExist) throw new NotFoundException('El usuario no existe');
@@ -67,20 +67,38 @@ export class AuthService {
             .build();
     }
 
-    async confirmAccount(registrationToken: string): Promise<ResponseEntity<User>> {
+    async confirmAccount(registerCode: string): Promise<ResponseEntity<User>> {
         
-        const tokenExist = await this.registerTokenModel.findOne({ token: registrationToken });
-        if (!tokenExist) throw new NotFoundException('El token es invalido');
+        const codeExist = await this.registerCodeModel.findOne({ code: registerCode });
+        if (!codeExist) throw new NotFoundException('El codigo es invalido');
         
-        const user = await this.userModel.findById(tokenExist.user);
+        const user = await this.userModel.findById(codeExist.user);
         user.confirmed = true;
 
-        await Promise.allSettled([ user.save(), tokenExist.deleteOne()])
+        await Promise.allSettled([user.save(), codeExist.deleteOne()])
 
         return new ResponseEntity<User>()
             .setRecords(user)
             .setTitle('confirmAccount')
             .setMessage('Usuario verificado correctamente')
+            .setStatus(201)
+            .build();
+    }
+
+    async requestRegisterCode(email: string): Promise<ResponseEntity<User>> {
+
+        const userExist = await this.userModel.findOne({ email });
+        if (!userExist) throw new NotFoundException('El usuario no existe');
+        if (userExist.confirmed) throw new ForbiddenException('El usuario ya está validado');
+
+        const registerCode = await this.registerCodeModel.create({ code: generateRegisterCode(), user: userExist })
+
+        this.eventEmitter.emit('user.register', { user: userExist, code: registerCode.code })
+
+        return new ResponseEntity<User>()
+            .setRecords(userExist)
+            .setTitle('requestConfimationCode')
+            .setMessage('Se envió un nuevo codigo, revise su correo!')
             .setStatus(201)
             .build();
     }
