@@ -16,7 +16,7 @@ import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { UserAutenticatedGuard } from 'src/utils/guards/user-autenticated/user-autenticated.guard';
 
-@UseGuards(UserAutenticatedGuard)
+// @UseGuards(UserAutenticatedGuard)
 @Controller('projects')
 export class ProjectsController {
   

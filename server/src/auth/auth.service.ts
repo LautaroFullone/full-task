@@ -44,7 +44,7 @@ export class AuthService {
             .build();
     }
 
-    public async handleLogin(loginData: LoginAuthDto) {
+    async handleLogin(loginData: LoginAuthDto): Promise<ResponseEntity<Token>> {
         
         const userExist = await this.userModel.findOne({ email: loginData.email });
         if (!userExist) throw new NotFoundException('El usuario no existe');
@@ -63,6 +63,24 @@ export class AuthService {
             .setRecords({ token })
             .setTitle('handleRegister')
             .setMessage('Sesion iniciada correctamente')
+            .setStatus(201)
+            .build();
+    }
+
+    async confirmAccount(registrationToken: string): Promise<ResponseEntity<User>> {
+        
+        const tokenExist = await this.registerTokenModel.findOne({ token: registrationToken });
+        if (!tokenExist) throw new NotFoundException('El token es invalido');
+        
+        const user = await this.userModel.findById(tokenExist.user);
+        user.confirmed = true;
+
+        await Promise.allSettled([ user.save(), tokenExist.deleteOne()])
+
+        return new ResponseEntity<User>()
+            .setRecords(user)
+            .setTitle('confirmAccount')
+            .setMessage('Usuario verificado correctamente')
             .setStatus(201)
             .build();
     }
