@@ -6,7 +6,10 @@ import { RegisterAuthDto } from 'src/dto/register-auth.dto';
 import { User, UserDocument } from 'src/users/model/user.schema';
 import { ResponseEntity } from 'src/utils/responses';
 import { JwtService } from '@nestjs/jwt';
-import { compareHash, generateHash } from 'src/utils/bcrypt/hashHandling';
+import { compareHash, generateHash } from 'src/utils/scripts/hashHandling';
+import { generateRegisterToken } from 'src/utils/scripts/tokenCreation';
+import { RegisterToken } from 'src/register-tokens/model/register-token.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 type Token = {
     token: string
@@ -16,17 +19,22 @@ type Token = {
 export class AuthService {
     
     constructor(private readonly jwtService: JwtService, 
-                @InjectModel(User.name) private readonly userModel: Model<UserDocument>) { }
+                private readonly eventEmitter: EventEmitter2,
+                @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+                @InjectModel(RegisterToken.name) private readonly registerTokenModel: Model<RegisterToken>) { }
     
-
     async handleRegister(registerData: RegisterAuthDto): Promise<ResponseEntity<User>> { 
        
         const userExist = await this.userModel.findOne({ email: registerData.email });
         if (userExist) throw new ConflictException('Ya existe un usuario registrado con ese email');
         
-        const cryptPass = await generateHash(registerData.password)
+        const cryptPass = await generateHash(registerData.password) 
         
         const newUser = await this.userModel.create({ ...registerData, password: cryptPass })
+        
+        const registrationToken = await this.registerTokenModel.create({ token: generateRegisterToken(), user: newUser })
+
+        this.eventEmitter.emit('user.register', { user: newUser, token: registrationToken.token})
 
         return new ResponseEntity<User>()
             .setRecords(newUser)

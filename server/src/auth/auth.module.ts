@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from 'src/users/model/user.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { RegisterToken, RegisterTokenSchema } from 'src/register-tokens/model/register-token.entity';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     MongooseModule.forFeature(
       [
         { name: User.name, schema: UserSchema },
+        { name: RegisterToken.name, schema: RegisterTokenSchema },
       ]
     )
   ],
