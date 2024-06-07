@@ -171,7 +171,7 @@ export class AuthService {
     /**
      * @description cambia la contraseña vieja por la nueva, volviendo a validar el codigo
      * @param login 
-     * @returns Promise<ResponseEntity<RegisterCode>>
+     * @returns Promise<ResponseEntity<User>>
      */
     async resetPassword(registerCode: string, newPassword: string): Promise<ResponseEntity<User>> {
 
