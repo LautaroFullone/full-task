@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import { LoginFormData, RegisterFormData, RequestRegisterCodeForm } from "../types";
+import { ForgotPasswordFormData, LoginFormData, NewPasswordFormData, RegisterFormData, RequestRegisterCodeFormData } from "../types";
 import { isAxiosError } from "axios";
 
 export async function registerAccount(formData: RegisterFormData){
@@ -34,7 +34,7 @@ export async function confirmAccount(registerCode: string) {
     }
 }
 
-export async function requestRegisterCode(formData: RequestRegisterCodeForm) {
+export async function requestRegisterCode(formData: RequestRegisterCodeFormData) {
     try {
         const { data } = await api.post(`/auth/request-code`, formData)
         return data;
@@ -58,6 +58,54 @@ export async function loginAccount(formData: LoginFormData) {
 
     } catch (error) {
         console.log('# ERROR: loginAccount', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}
+
+export async function forgotPassword(formData: ForgotPasswordFormData) {
+    try {
+        const { data } = await api.post(`/auth/forgot-password`, formData)
+        return data;
+
+    } catch (error) {
+        console.log('# ERROR: forgotPassword', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}
+
+export async function validateCode(registerCode: string) {
+    try {
+        const { data } = await api.post(`/auth/validate-code`, { code: registerCode })
+        return data;
+
+    } catch (error) {
+        console.log('# ERROR: validateCode', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}
+
+export async function resetPassword({ formData, registerCode }: { formData: NewPasswordFormData, registerCode: string }) {
+    try {
+        const { data } = await api.post(`/auth/reset-password/${registerCode}`, formData)
+        return data;
+
+    } catch (error) {
+        console.log('# ERROR: resetPassword', error)
         if (isAxiosError(error) && error.response)
             throw new Error(error.response.data.message)
         else if (error instanceof Error)

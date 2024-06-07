@@ -43,11 +43,10 @@ export default function RegisterView() {
                 <span className=" text-fuchsia-500 font-bold"> crear tu cuenta</span>
             </p>
 
-            <form
-                onSubmit={handleSubmit(handleRegister)}
-                className="space-y-8 p-10 bg-white mt-10"
-                noValidate
-            >
+            <form onSubmit={handleSubmit(handleRegister)}
+                className="space-y-8 p-10 bg-white mt-10 rounded-lg"
+                noValidate>
+                    
                 <div className="flex flex-col gap-5">
                     <label className="font-normal text-2xl" htmlFor="email">Email</label>
                     <input

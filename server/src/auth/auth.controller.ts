@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterAuthDto } from 'src/auth/dto/register-auth.dto';
 import { LoginAuthDto } from 'src/auth/dto/login-auth.dto';
 import { RegisterCodeDto } from '../register-codes/dto/register-code.dto';
 import { RequestCodeAuthDto } from './dto/request-code-auth.dto';
+import { ResetPasswordAuthDto } from './dto/reset-password-auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -28,5 +29,20 @@ export class AuthController {
     @Post('request-code')
     requestRegisterCode(@Body() requestCode: RequestCodeAuthDto) {
         return this.authService.requestRegisterCode(requestCode.email);
+    }
+
+    @Post('forgot-password')
+    forgotPassword(@Body() requestCode: RequestCodeAuthDto) {
+        return this.authService.forgotPassword(requestCode.email);
+    }
+
+    @Post('validate-code')
+    validateRegisterCode(@Body() registerCode: RegisterCodeDto) {
+        return this.authService.validateRegisterCode(registerCode.code);
+    }
+
+    @Post('reset-password/:code')
+    resetPassword(@Param('code') code: string, @Body() resetPasswordAuthDto: ResetPasswordAuthDto) {
+        return this.authService.resetPassword(code, resetPasswordAuthDto.password);
     }
  }

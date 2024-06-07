@@ -13,7 +13,9 @@ interface ProjectFormProps {
 export default function ProjectForm({ register, errors, handleSubmit, action }: ProjectFormProps) {
     return (
         <>
-            <form onSubmit={handleSubmit} className="mt-10 shadow-lg p-10 rounded-lg" noValidate>
+            <form onSubmit={handleSubmit} 
+                className="mt-10 shadow-lg p-10 rounded-lg" 
+                noValidate>
                 
                 <div className="mb-5 space-y-3">
                     <label htmlFor="projectName" className="text-sm uppercase font-bold">
