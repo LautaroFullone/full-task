@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import { ForgotPasswordFormData, LoginFormData, NewPasswordFormData, RegisterFormData, RequestRegisterCodeFormData } from "../types";
+import { ForgotPasswordFormData, LoginFormData, NewPasswordFormData, RegisterFormData, RequestRegisterCodeFormData, userSchema } from "../types";
 import { isAxiosError } from "axios";
 
 export async function registerAccount(formData: RegisterFormData){
@@ -118,7 +118,11 @@ export async function resetPassword({ formData, registerCode }: { formData: NewP
 export async function getAutenticatedUser() {
     try {
         const { data } = await api.get(`/auth/user`)
-        return data;
+        const response = userSchema.safeParse(data);
+
+        if (!response.success) throw new Error('Error parsing response');
+
+        return response.data
 
     } catch (error) {
         console.log('# ERROR: getAutenticatedUser', error)
