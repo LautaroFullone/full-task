@@ -114,3 +114,19 @@ export async function resetPassword({ formData, registerCode }: { formData: NewP
             throw new Error('An unknown error has ocurred')
     }
 }
+
+export async function getAutenticatedUser() {
+    try {
+        const { data } = await api.get(`/auth/user`)
+        return data;
+
+    } catch (error) {
+        console.log('# ERROR: getAutenticatedUser', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}
