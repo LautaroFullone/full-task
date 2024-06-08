@@ -15,6 +15,8 @@ import { TaskExistsGuard } from 'src/utils/guards/task-exists/task-exists.guard'
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { UserAutenticatedGuard } from 'src/utils/guards/user-autenticated/user-autenticated.guard';
+import { UserReq } from 'src/utils/decorators/user-req/user-req.decorator';
+import { UserDocument } from 'src/users/model/user.schema';
 
 // @UseGuards(UserAutenticatedGuard)
 @Controller('projects')
@@ -28,8 +30,9 @@ export class ProjectsController {
     return this.projectsService.createProject(createProjectDto);
   }
   
+  @UseGuards(UserAutenticatedGuard)
   @Get()
-  getAllProjects() {
+  getAllProjects(@UserReq() user: UserDocument) {
     return this.projectsService.getAllProjects();
   }
     
