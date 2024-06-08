@@ -3,7 +3,7 @@ import { loginAccount } from '@/services/AuthApi'
 import { LoginFormData } from '@/types/index'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export default function LoginView() {
@@ -13,12 +13,18 @@ export default function LoginView() {
         password: '',
     }
 
+    const navigate = useNavigate()
+
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
 
     const mutation = useMutation({
         mutationFn: loginAccount,
         onSuccess: (response) => {
             toast.success(response.message)
+            navigate('/')
+        },
+        onError: (response) => {
+            toast.error(response.message)
         }
     })
 

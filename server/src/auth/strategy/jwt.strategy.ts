@@ -19,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     //lo que retorna una vez validado el token, si esta autorizado ejecuta esto
     async validate(payload: { id: string }) {
         //el id es lo que viene decodificado del token, con eso busco en la bd al user
-        const user = await this.userModel.findById(payload.id)
+        const user = await this.userModel.findById(payload.id).select('_id name email confirmed')
         return user;
     }
 }

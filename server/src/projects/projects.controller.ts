@@ -18,85 +18,90 @@ import { UserAutenticatedGuard } from 'src/utils/guards/user-autenticated/user-a
 import { UserReq } from 'src/utils/decorators/user-req/user-req.decorator';
 import { UserDocument } from 'src/users/model/user.schema';
 
-// @UseGuards(UserAutenticatedGuard)
+@UseGuards(UserAutenticatedGuard)
 @Controller('projects')
 export class ProjectsController {
-  
-  constructor(private readonly projectsService: ProjectsService,
-              private readonly tasksService: TasksService) { }
 
-  @Post()
-  createProject(@Body() createProjectDto: CreateProjectDto) {
-    return this.projectsService.createProject(createProjectDto);
-  }
-  
-  @UseGuards(UserAutenticatedGuard)
-  @Get()
-  getAllProjects(@UserReq() user: UserDocument) {
-    return this.projectsService.getAllProjects();
-  }
-    
-  @Get(':projectID')
-  getProjectById(@Param('projectID', ObjectIdPipe) projectID: string) {
-    return this.projectsService.getProjectById(projectID);
-  }
+    constructor(private readonly projectsService: ProjectsService,
+        private readonly tasksService: TasksService) { }
 
-  @Patch(':projectID')
-  @UseGuards(ProjectExistsGuard)
-  updateProject(
-    @ProjectReq() project: ProjectDocument,
-    @Body() updateProjectDto: UpdateProjectDto) {
-    return this.projectsService.updateProject(project, updateProjectDto);
-  }
-        
-  @Delete(':projectID')
-  deleteProject(@Param('projectID', new ObjectIdPipe()) projectID: string) {
-    return this.projectsService.deleteProject(projectID);
-  }
-      
-  //---------------------<[ TASKS ]>---------------------
-      
-  @Post(':projectID/tasks') 
-  @UseGuards(ProjectExistsGuard)
-  createTask(
-    @Body() createTaskDto: CreateTaskDto, 
-    @ProjectReq() project: ProjectDocument) { //es lo mismo que usar: @Req() req: RequestWithProyectValue -> req.project
-      return this.tasksService.createTask(project, createTaskDto);
-  }
+    @Post()
+    createProject(@UserReq() user: UserDocument,
+                  @Body() createProjectDto: CreateProjectDto) {
 
-  @Get(':projectID/tasks')
-  @UseGuards(ProjectExistsGuard)
-  getAllTasksByProjectId(@Req() req: RequestWithProyectValue) {
-    return this.tasksService.getAllTasksByProjectId(req.project);
-  }
-    
-  @Get(':projectID/tasks/:taskID')
-  @UseGuards(ProjectExistsGuard, TaskExistsGuard)
-  getTaskById(@TaskReq() task: TaskDocument) {
-      return this.tasksService.getTaskById(task);     
-  }
-  
-  @Patch(':projectID/tasks/:taskID')
-  @UseGuards(ProjectExistsGuard, TaskExistsGuard)
-  updateTask(
-    @TaskReq() task: TaskDocument,
-    @Body() updateTaskDto: UpdateTaskDto) { 
-      return this.tasksService.updateTask(task, updateTaskDto);
-  }
+        return this.projectsService.createProject(user, createProjectDto);
+    }
 
-  @Patch(':projectID/tasks/:taskID/status')
-  @UseGuards(ProjectExistsGuard, TaskExistsGuard)
-  updateTaskStatus(
-    @TaskReq() task: TaskDocument,
-    @Body() status: UpdateTaskStatusDto) {
-      return this.tasksService.updateTaskStatus(task, status);
-  }
+    @Get()
+    getAllProjects(@UserReq() user: UserDocument) {
+        return this.projectsService.getAllProjects(user);
+    }
 
-  @Delete(':projectID/tasks/:taskID')
-  @UseGuards(ProjectExistsGuard, TaskExistsGuard)
-  deleteTask(
-    @TaskReq() task: TaskDocument,
-    @ProjectReq() project: ProjectDocument) {
-      return this.tasksService.deleteTask(project, task);
-  }
+    @Get(':projectID')
+    getProjectById(@UserReq() user: UserDocument,
+                   @Param('projectID', ObjectIdPipe) projectID: string) {
+
+        return this.projectsService.getProjectById(user, projectID);
+    }
+
+    @Patch(':projectID')
+    @UseGuards(ProjectExistsGuard)
+    updateProject(@UserReq() user: UserDocument,
+                  @ProjectReq() project: ProjectDocument,
+                  @Body() updateProjectDto: UpdateProjectDto) {
+
+        return this.projectsService.updateProject(user, project, updateProjectDto);
+    }
+
+    @Delete(':projectID')
+    deleteProject(@UserReq() user: UserDocument,
+                  @ProjectReq() project: ProjectDocument) {
+        return this.projectsService.deleteProject(user, project);
+    }
+
+    //---------------------<[ TASKS ]>---------------------
+
+    @Post(':projectID/tasks')
+    @UseGuards(ProjectExistsGuard)
+    createTask(
+        @Body() createTaskDto: CreateTaskDto,
+        @ProjectReq() project: ProjectDocument) { //es lo mismo que usar: @Req() req: RequestWithProyectValue -> req.project
+        return this.tasksService.createTask(project, createTaskDto);
+    }
+
+    @Get(':projectID/tasks')
+    @UseGuards(ProjectExistsGuard)
+    getAllTasksByProjectId(@Req() req: RequestWithProyectValue) {
+        return this.tasksService.getAllTasksByProjectId(req.project);
+    }
+
+    @Get(':projectID/tasks/:taskID')
+    @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+    getTaskById(@TaskReq() task: TaskDocument) {
+        return this.tasksService.getTaskById(task);
+    }
+
+    @Patch(':projectID/tasks/:taskID')
+    @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+    updateTask(
+        @TaskReq() task: TaskDocument,
+        @Body() updateTaskDto: UpdateTaskDto) {
+        return this.tasksService.updateTask(task, updateTaskDto);
+    }
+
+    @Patch(':projectID/tasks/:taskID/status')
+    @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+    updateTaskStatus(
+        @TaskReq() task: TaskDocument,
+        @Body() status: UpdateTaskStatusDto) {
+        return this.tasksService.updateTaskStatus(task, status);
+    }
+
+    @Delete(':projectID/tasks/:taskID')
+    @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+    deleteTask(
+        @TaskReq() task: TaskDocument,
+        @ProjectReq() project: ProjectDocument) {
+        return this.tasksService.deleteTask(project, task);
+    }
 }

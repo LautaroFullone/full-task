@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProjectDto } from '../projects/dto/create-project.dto';
 import { UpdateProjectDto } from '../projects/dto/update-project.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Project, ProjectDocument } from '../projects/model/project.schema';
-import { Model } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { ResponseEntity } from 'src/utils/responses';
+import { UserDocument } from 'src/users/model/user.schema';
 
 interface ModelExt<T> extends Model<T> {
   delete: Function;
@@ -15,8 +16,9 @@ export class ProjectsService {
 
   constructor(@InjectModel(Project.name) private readonly projectModel: ModelExt<ProjectDocument>) { }
 
-  async createProject(createProjectDto: CreateProjectDto): Promise<ResponseEntity<Project>> {
-    const newProject = await this.projectModel.create(createProjectDto);
+  async createProject(user: UserDocument, createProjectDto: CreateProjectDto): Promise<ResponseEntity<Project>> {
+    
+    const newProject = await this.projectModel.create({ ...createProjectDto, manager: user._id });
     
     return new ResponseEntity<Project>()
       .setRecords(newProject)
@@ -26,9 +28,9 @@ export class ProjectsService {
       .build();
   }
 
-  async getAllProjects(): Promise<ResponseEntity<Project[]>> {
-    const projectsList = await this.projectModel.find()
-      .populate('tasks');
+  async getAllProjects(user: UserDocument): Promise<ResponseEntity<Project[]>> {
+    
+    const projectsList = await this.projectModel.find({ manager: user._id }).populate('tasks');
 
     return new ResponseEntity<Project[]>()
       .setRecords(projectsList)
@@ -38,11 +40,14 @@ export class ProjectsService {
       .build();
   }
 
-  async getProjectById(id: string): Promise<ResponseEntity<Project>> {
+  async getProjectById(user: UserDocument, id: string): Promise<ResponseEntity<Project>> {
+    
     const project = await this.projectModel.findById(id)
       .populate('tasks');
     
-    if (!project) throw new NotFoundException(`Project with ID "${id}" not found`);
+    if(!project) throw new NotFoundException(`Project with ID "${id}" not found`);
+
+    if(project.manager.toString() !== user._id.toString()) throw new ForbiddenException(`Invalid action`);
 
     return new ResponseEntity<Project>()
       .setRecords(project)
@@ -52,7 +57,9 @@ export class ProjectsService {
       .build();
   }
 
-  async updateProject(project: ProjectDocument, updateProjectDto: UpdateProjectDto): Promise<ResponseEntity<Project>> {
+  async updateProject(user: UserDocument, project: ProjectDocument, updateProjectDto: UpdateProjectDto): Promise<ResponseEntity<Project>> {
+    
+    if(project.manager.toString() !== user._id.toString()) throw new ForbiddenException('Solo el manager puede editar un proyecto');
     
     const updatedProject = await this.projectModel.findByIdAndUpdate(project._id, updateProjectDto, { new: true })
 
@@ -64,10 +71,13 @@ export class ProjectsService {
       .build();
   }
 
-  async deleteProject(id: string): Promise<ResponseEntity<Project>> {
-    const deletedProject = await this.projectModel.findByIdAndDelete(id);
+  async deleteProject(user: UserDocument, project: ProjectDocument): Promise<ResponseEntity<Project>> {
 
-    if (!deletedProject) throw new NotFoundException(`Project with ID "${id}" not found`);
+    if(project.manager.toString() !== user._id.toString()) throw new ForbiddenException('Solo el manager puede editar un proyecto');
+
+    const deletedProject = await this.projectModel.findByIdAndDelete(project.id);
+
+    if (!deletedProject) throw new NotFoundException(`Project with ID "${project.id}" not found`);
 
     return new ResponseEntity<Project>()
       .setRecords(deletedProject)

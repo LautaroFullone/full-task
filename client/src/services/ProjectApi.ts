@@ -18,7 +18,7 @@ export async function createProject(projectData: ProjectFormData){
     }
 }
 
-export async function getAllProjects() {
+export async function getAllProjects() { 
     try {
         const { data } = await api.get(`/projects`)
         const response = responseProjectsListSchema.safeParse(data)
