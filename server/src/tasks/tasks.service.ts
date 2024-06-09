@@ -70,7 +70,7 @@ export class TasksService {
       .build();
   }
   
-  async updateTaskStatus(task: TaskDocument, { status: newStatus }: UpdateTaskStatusDto): Promise<ResponseEntity<Task>>{
+  async updateTaskStatus(task: TaskDocument, newStatus: Task['status']): Promise<ResponseEntity<Task>>{
 
     task.status = newStatus
     

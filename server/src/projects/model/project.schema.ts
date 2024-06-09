@@ -22,6 +22,9 @@ export class Project {
 
     @Prop({ type: Types.ObjectId, ref: 'User' })
     manager: UserDocument;
+
+    @Prop({ type: [Types.ObjectId], ref: 'User' })
+    team: UserDocument[];
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

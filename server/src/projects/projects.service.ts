@@ -40,7 +40,7 @@ export class ProjectsService {
       .build();
   }
 
-  async getProjectById(user: UserDocument, id: string): Promise<ResponseEntity<Project>> {
+  async getProjectById(user: UserDocument, id: ProjectDocument['_id']): Promise<ResponseEntity<Project>> {
     
     const project = await this.projectModel.findById(id)
       .populate('tasks');

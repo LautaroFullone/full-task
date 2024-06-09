@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Project, ProjectSchema } from './model/project.schema';
 import { TasksModule } from 'src/tasks/tasks.module';
 import { Task, TaskSchema } from 'src/tasks/model/task.schema';
+import { TeamModule } from 'src/team/team.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { Task, TaskSchema } from 'src/tasks/model/task.schema';
         { name: Task.name, schema: TaskSchema },
       ]
     ),
-    TasksModule
+    TasksModule,
+    TeamModule
   ],
   controllers: [ProjectsController],
   providers: [ProjectsService],

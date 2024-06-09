@@ -16,14 +16,18 @@ import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { UserAutenticatedGuard } from 'src/utils/guards/user-autenticated/user-autenticated.guard';
 import { UserReq } from 'src/utils/decorators/user-req/user-req.decorator';
-import { UserDocument } from 'src/users/model/user.schema';
+import { User, UserDocument } from 'src/users/model/user.schema';
+import { EmailAuthDto } from 'src/auth/dto/email-auth.dto';
+import { TeamService } from 'src/team/team.service';
+import { IdAuthDto } from 'src/auth/dto/id-auth.dto';
 
 @UseGuards(UserAutenticatedGuard)
 @Controller('projects')
 export class ProjectsController {
 
     constructor(private readonly projectsService: ProjectsService,
-        private readonly tasksService: TasksService) { }
+                private readonly tasksService: TasksService,
+                private readonly teamService: TeamService) { }
 
     @Post()
     createProject(@UserReq() user: UserDocument,
@@ -39,7 +43,7 @@ export class ProjectsController {
 
     @Get(':projectID')
     getProjectById(@UserReq() user: UserDocument,
-                   @Param('projectID', ObjectIdPipe) projectID: string) {
+                   @Param('projectID', ObjectIdPipe) projectID: ProjectDocument['_id']) {
 
         return this.projectsService.getProjectById(user, projectID);
     }
@@ -94,7 +98,7 @@ export class ProjectsController {
     updateTaskStatus(
         @TaskReq() task: TaskDocument,
         @Body() status: UpdateTaskStatusDto) {
-        return this.tasksService.updateTaskStatus(task, status);
+        return this.tasksService.updateTaskStatus(task, status.status);
     }
 
     @Delete(':projectID/tasks/:taskID')
@@ -103,5 +107,21 @@ export class ProjectsController {
         @TaskReq() task: TaskDocument,
         @ProjectReq() project: ProjectDocument) {
         return this.tasksService.deleteTask(project, task);
+    }
+
+    //---------------------<[ TEAM ]>---------------------
+
+    @Get(':projectID/team/find')
+    @UseGuards(ProjectExistsGuard)
+    getProjectMemberByEmail(
+        @Body() emailAuthDto: EmailAuthDto) { 
+        return this.teamService.getProjectMemberByEmail(emailAuthDto.email);
+    }
+
+    @Post(':projectID/team')
+    @UseGuards(ProjectExistsGuard)
+    addProjectMember(@Body() idAuthDto: IdAuthDto, 
+                     @ProjectReq() project: ProjectDocument) { 
+        return this.teamService.addProjectMember(idAuthDto.id, project);
     }
 }

@@ -1,6 +1,6 @@
 import { IsEmail } from "class-validator";
 
-export class RequestCodeAuthDto {
+export class EmailAuthDto {
 
     @IsEmail()
     email: string
