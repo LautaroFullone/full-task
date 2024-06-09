@@ -22,9 +22,14 @@ export default function AddMemberForm({ projectID }: AddMemberFormProps) {
         mutationFn: getProjectMemberByEmail
     })
 
-     function onSubmit(formData: TeamMemberFormData) { 
+    function onSubmit(formData: TeamMemberFormData) { 
         mutation.mutate({ projectID, email: formData.email})
         console.log(mutation)
+    }
+
+    function resetData(){
+        reset();
+        mutation.reset()
     }
 
     return (
@@ -63,7 +68,7 @@ export default function AddMemberForm({ projectID }: AddMemberFormProps) {
             <div className="mt-10">
                 { mutation.isPending && <p className="text-center"> Cargando...</p>}
                 { mutation.isError && <p className="text-center">{ mutation.error.message }</p>}
-                { mutation.data && <SearchResult user={mutation.data.records} />}
+                { mutation.data && <SearchResult user={mutation.data.records} projectID={projectID} onFinish={resetData}/>}
 
             </div>
 

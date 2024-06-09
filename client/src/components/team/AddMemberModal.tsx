@@ -14,12 +14,11 @@ export default function AddMemberModal({ projectID }: AddMemberModalProps) {
     const navigate = useNavigate()
 
     const queryParams = new URLSearchParams(location.search);
-    const addMember = queryParams.get('addMember');
-    const show = addMember ? true : false
+    const addMember = queryParams.get('addMember')!;
 
     return (
         <>
-            <Transition appear show={show} as={Fragment}>
+            <Transition appear show={!!addMember} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => navigate(location.pathname, { replace: true })}>
                     <Transition.Child
                         as={Fragment}
