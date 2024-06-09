@@ -125,7 +125,7 @@ export class ProjectsController {
         return this.teamService.getAllProjectMembers(project._id);
     }
         
-    @Get(':projectID/team/find')
+    @Post(':projectID/team/find')
     @UseGuards(ProjectExistsGuard)
     getProjectMemberByEmail(@Body() emailAuthDto: EmailAuthDto) { 
         return this.teamService.getProjectMemberByEmail(emailAuthDto.email);

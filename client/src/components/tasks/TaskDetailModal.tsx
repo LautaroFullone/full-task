@@ -88,7 +88,7 @@ export default function TaskDetailModal({ projectID }: TaskDetailModalProps) {
                                 >
                                     <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
                                         <p className='text-sm text-slate-400'>Agregada el: { formatDate(task.createdAt) }</p>
-                                        <p className='text-sm text-slate-400'>Última actualización: {formatDate(task.updatedAt)}</p>
+                                        <p className='text-sm text-slate-400'>Última actualización: { formatDate(task.updatedAt) }</p>
                                         <Dialog.Title
                                             as="h3"
                                             className="font-black text-4xl text-slate-600 my-5"

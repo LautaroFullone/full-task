@@ -4,7 +4,7 @@ import TaskEditorShield from "@/components/tasks/TaskEditorShield"
 import TasksList from "@/components/tasks/TasksList"
 import { getProjectById } from "@/services/ProjectApi"
 import { useQuery } from "@tanstack/react-query"
-import { Navigate, useNavigate, useParams } from "react-router-dom"
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
 
 export default function DetailProjectView() {
 
@@ -28,10 +28,14 @@ export default function DetailProjectView() {
                 <button type="button"
                     onClick={() => navigate('?newTask=true')} 
                     className="bg-purple-400 hover:bg-purple-500 px-10 py-3
-                     text-white text-xl font-bold cursor-pointer transition-colors"
-                     >
+                     text-white text-xl font-bold cursor-pointer transition-colors">
                     Agregar Tarea
                 </button>
+
+                <Link to={'team'}
+                    className="bg-fuchsia-600 hover:bg-fuchsia-700 px-10 py-3
+                     text-white text-xl font-bold cursor-pointer transition-colors">Colaboradores
+                     </Link>
             </nav>
 
             <TasksList tasks={data.records.tasks} projectID={projectID!} />

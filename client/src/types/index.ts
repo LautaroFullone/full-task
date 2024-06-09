@@ -68,6 +68,16 @@ export type Project = z.infer<typeof projectSchema>
 //creamos otro type pero sin el ID
 export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'description'>
 
+//---------------------<[ TEAM ]>--------------------
+export const teamMemberSchema = userSchema.pick({
+    _id: true,
+    name: true,
+    email: true,
+})
+
+export type TeamMember = z.infer<typeof teamMemberSchema>
+export type TeamMemberFormData = Pick<TeamMember, 'email'>
+
 //---------------------<[ RESPONSE ENTITY ]>---------------------
 const responseEntitySchema = z.object({
     title: z.string(),
@@ -89,4 +99,12 @@ export const responseTaskSchema = responseEntitySchema.merge(
 
 export const responseTasksListSchema = responseEntitySchema.merge(
     z.object({ records: z.array(taskSchema) })
+)
+
+export const responseTeamMemberSchema = responseEntitySchema.merge(
+    z.object({ records: teamMemberSchema })
+)
+
+export const responseTeamMembersListSchema = responseEntitySchema.merge(
+    z.object({ records: z.array(teamMemberSchema) })
 )

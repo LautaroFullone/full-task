@@ -36,7 +36,6 @@ export class TeamService {
             select: 'id name email'
         })
 
-
         return new ResponseEntity<User[]>()
             .setRecords(team)
             .setTitle('getAllProjectMembers')
@@ -52,7 +51,7 @@ export class TeamService {
 
         return new ResponseEntity<User>()
             .setRecords(user)
-            .setTitle('getProjectMembersByEmail')
+            .setTitle('getProjectMemberByEmail')
             .setMessage('Usuario encontrado')
             .setStatus(200)
             .build();
