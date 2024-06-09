@@ -14,7 +14,7 @@ import { RegisterCode, RegisterCodeSchema } from 'src/register-codes/model/regis
       useFactory: () => {
         return {
           secret: process.env.JWT_SECRET,
-          signOptions: { expiresIn: '10m' },
+          signOptions: { expiresIn: '1h' },
         }
       }
     }),

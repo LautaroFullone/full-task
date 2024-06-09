@@ -20,6 +20,7 @@ import { User, UserDocument } from 'src/users/model/user.schema';
 import { EmailAuthDto } from 'src/auth/dto/email-auth.dto';
 import { TeamService } from 'src/team/team.service';
 import { IdAuthDto } from 'src/auth/dto/id-auth.dto';
+import { Types } from 'mongoose';
 
 @UseGuards(UserAutenticatedGuard)
 @Controller('projects')
@@ -110,18 +111,30 @@ export class ProjectsController {
     }
 
     //---------------------<[ TEAM ]>---------------------
-
-    @Get(':projectID/team/find')
-    @UseGuards(ProjectExistsGuard)
-    getProjectMemberByEmail(
-        @Body() emailAuthDto: EmailAuthDto) { 
-        return this.teamService.getProjectMemberByEmail(emailAuthDto.email);
-    }
-
+    
     @Post(':projectID/team')
     @UseGuards(ProjectExistsGuard)
     addProjectMember(@Body() idAuthDto: IdAuthDto, 
                      @ProjectReq() project: ProjectDocument) { 
         return this.teamService.addProjectMember(idAuthDto.id, project);
+    }
+
+    @Get(':projectID/team')
+    @UseGuards(ProjectExistsGuard)
+    getAllProjectMembers(@ProjectReq() project: ProjectDocument) {
+        return this.teamService.getAllProjectMembers(project._id);
+    }
+        
+    @Get(':projectID/team/find')
+    @UseGuards(ProjectExistsGuard)
+    getProjectMemberByEmail(@Body() emailAuthDto: EmailAuthDto) { 
+        return this.teamService.getProjectMemberByEmail(emailAuthDto.email);
+    }
+
+    @Delete(':projectID/team')
+    @UseGuards(ProjectExistsGuard)
+    deleteProjectMember(@Body() idAuthDto: IdAuthDto,
+                        @ProjectReq() project: ProjectDocument) {
+        return this.teamService.deleteProjectMember(idAuthDto.id, project);
     }
 }
