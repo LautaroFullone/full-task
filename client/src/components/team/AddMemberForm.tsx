@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ErrorMessage from "../ErrorMessage";
 import { Project, TeamMemberFormData } from "@/types/index";
 import { getProjectMemberByEmail } from "@/services/TeamApi";
@@ -17,6 +17,8 @@ export default function AddMemberForm({ projectID }: AddMemberFormProps) {
     }
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues: initialValues })
+    
+    const queryClient = useQueryClient();
 
     const mutation = useMutation({
         mutationFn: getProjectMemberByEmail
@@ -24,7 +26,7 @@ export default function AddMemberForm({ projectID }: AddMemberFormProps) {
 
     function onSubmit(formData: TeamMemberFormData) { 
         mutation.mutate({ projectID, email: formData.email})
-        console.log(mutation)
+        queryClient.invalidateQueries({ queryKey: ['getProjectMembers'] }) 
     }
 
     function resetData(){

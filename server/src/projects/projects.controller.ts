@@ -131,10 +131,10 @@ export class ProjectsController {
         return this.teamService.getProjectMemberByEmail(emailAuthDto.email);
     }
 
-    @Delete(':projectID/team')
+    @Delete(':projectID/team/:userID')
     @UseGuards(ProjectExistsGuard)
-    deleteProjectMember(@Body() idAuthDto: IdAuthDto,
-                        @ProjectReq() project: ProjectDocument) {
-        return this.teamService.deleteProjectMember(idAuthDto.id, project);
+    deleteProjectMember(@ProjectReq() project: ProjectDocument,
+                        @Param('userID', ObjectIdPipe) userID: UserDocument['_id']) {
+        return this.teamService.deleteProjectMember(userID, project);
     }
 }
