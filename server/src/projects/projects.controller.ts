@@ -20,7 +20,7 @@ import { User, UserDocument } from 'src/users/model/user.schema';
 import { EmailAuthDto } from 'src/auth/dto/email-auth.dto';
 import { TeamService } from 'src/team/team.service';
 import { IdAuthDto } from 'src/auth/dto/id-auth.dto';
-import { Types } from 'mongoose';
+import { HasAutorizationGuard } from 'src/utils/guards/has-autorization/has-autorization.guard';
 
 @UseGuards(UserAutenticatedGuard)
 @Controller('projects')
@@ -67,7 +67,7 @@ export class ProjectsController {
     //---------------------<[ TASKS ]>---------------------
 
     @Post(':projectID/tasks')
-    @UseGuards(ProjectExistsGuard)
+    @UseGuards(ProjectExistsGuard, HasAutorizationGuard)
     createTask(
         @Body() createTaskDto: CreateTaskDto,
         @ProjectReq() project: ProjectDocument) { //es lo mismo que usar: @Req() req: RequestWithProyectValue -> req.project
@@ -87,7 +87,7 @@ export class ProjectsController {
     }
 
     @Patch(':projectID/tasks/:taskID')
-    @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+    @UseGuards(ProjectExistsGuard, TaskExistsGuard, HasAutorizationGuard)
     updateTask(
         @TaskReq() task: TaskDocument,
         @Body() updateTaskDto: UpdateTaskDto) {
@@ -103,7 +103,7 @@ export class ProjectsController {
     }
 
     @Delete(':projectID/tasks/:taskID')
-    @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+    @UseGuards(ProjectExistsGuard, TaskExistsGuard, HasAutorizationGuard)
     deleteTask(
         @TaskReq() task: TaskDocument,
         @ProjectReq() project: ProjectDocument) {

@@ -23,10 +23,11 @@ const statusColors: { [key: string]: string } = {
 }
 
 interface TasksListProps {
-    tasks: Task[],
-    projectID: Project['_id']
+    tasks: Task[];
+    canUserEdit: boolean;
+    projectID: Project['_id'];
 }
-export default function TasksList({ tasks, projectID }: TasksListProps) {
+export default function TasksList({ tasks, projectID, canUserEdit }: TasksListProps) {
 
     const groupedTasks = tasks.reduce((acc, task) => {
         let currentGroup = acc[task.status] ? [...acc[task.status]] : [];
@@ -54,7 +55,10 @@ export default function TasksList({ tasks, projectID }: TasksListProps) {
                                 {
                                     tasks.length === 0 
                                         ? <li className="text-gray-500 text-center pt-3">No Hay tareas</li>
-                                        : tasks.map(task => <TaskCard key={task._id} task={task} projectID={projectID} />)
+                                        : tasks.map(task => <TaskCard key={task._id} 
+                                                                task={task} 
+                                                                canUserEdit={canUserEdit} 
+                                                                projectID={projectID} />)
                                 }
                             </ul>
 

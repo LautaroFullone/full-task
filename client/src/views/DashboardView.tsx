@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import ProjectCard from "@/components/projects/ProjectCard";
 import useAuth from "@/hooks/useAuth";
 
-
 export default function DashboardView() {
 
     const { data: user, isLoading: isUserLoading } = useAuth()

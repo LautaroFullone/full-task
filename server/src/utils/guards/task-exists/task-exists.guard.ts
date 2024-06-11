@@ -6,30 +6,30 @@ import { InvalidRelationshipException } from 'src/utils/exceptions/invalid-relat
 
 @Injectable()
 export class TaskExistsGuard implements CanActivate {
-  
-  constructor(@InjectModel(Task.name) private readonly taskModel: Model<TaskDocument>) { }
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    
-    const [req, _] = context.getArgs();
-    const { project } = req;
-    const { taskID } = req.params;
+    constructor(@InjectModel(Task.name) private readonly taskModel: Model<TaskDocument>) { }
 
-    if (!Types.ObjectId.isValid(taskID)) //duplico el pipe aqui ya que se ejecuta primero el guard
-      throw new BadRequestException(`TASK GUARD: Invalid ID format: ${taskID}`);
+    async canActivate(context: ExecutionContext): Promise<boolean> {
 
-    const task = await this.taskModel.findById(taskID);
+        const [req, _] = context.getArgs();
+        const { project } = req;
+        const { taskID } = req.params;
 
-    if (!task) throw new NotFoundException(`Task with ID "${taskID}" not found`);
+        if (!Types.ObjectId.isValid(taskID)) //duplico el pipe aqui ya que se ejecuta primero el guard
+            throw new BadRequestException(`TASK GUARD: Invalid ID format: ${taskID}`);
 
-    if (!project) throw new NotFoundException(`Project is missing in request`);
+        const task = await this.taskModel.findById(taskID);
 
-    //si la task no pertenece al project enviado, lanza error
-    if (task.project.toString() !== project._id.toString())
-      throw new InvalidRelationshipException;
+        if (!task) throw new NotFoundException(`Task with ID "${taskID}" not found`);
 
-    req.task = task;
+        if (!project) throw new NotFoundException(`Project is missing in request`);
 
-    return true;
-  }
+        //si la task no pertenece al project enviado, lanza error
+        if (task.project.toString() !== project._id.toString())
+            throw new InvalidRelationshipException;
+
+        req.task = task;
+
+        return true;
+    }
 }

@@ -6,6 +6,7 @@ import useAuth from "@/hooks/useAuth"
 import { getProjectById } from "@/services/ProjectApi"
 import { isManager } from "@/utils/policies"
 import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
 
 export default function DetailProjectView() {
@@ -15,16 +16,19 @@ export default function DetailProjectView() {
 
     const { data: user, isLoading: isUserLoading } = useAuth()
 
-
     const { data, isError, isLoading } = useQuery({
         queryKey: ['getProject', projectID], //para tener un identificador dinamico
         queryFn: () => getProjectById(projectID!),
         retry: false,
     })
 
-    if (isLoading && isUserLoading) return 'Cargando...'
+    //almacena el resultado de la funcion cuando alguna de las dependencias cambia
+    const canEdit = useMemo(() => data?.records.manager === user?._id, [data, user])
+
+
+    if(isLoading && isUserLoading) return 'Cargando...'
     if(isError) return <Navigate to={'error'} />
-    if (data && user) return (
+    if(data && user) return (
         <>
             <h1 className="text-5xl font-black">{data.records.projectName}</h1>
             <p className="text-2xl font-light text-gray-500 mt-5">{data.records.description}</p>
@@ -47,7 +51,9 @@ export default function DetailProjectView() {
                     </nav>   
             }
 
-            <TasksList tasks={data.records.tasks} projectID={projectID!} />
+            <TasksList tasks={data.records.tasks} 
+                canUserEdit={canEdit} 
+                projectID={projectID!} />
 
             <TaskCreateModal projectID={projectID!} />
 

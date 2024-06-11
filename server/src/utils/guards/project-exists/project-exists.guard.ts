@@ -6,23 +6,23 @@ import { Project, ProjectDocument } from 'src/projects/model/project.schema';
 @Injectable()
 export class ProjectExistsGuard implements CanActivate {
 
-  constructor(@InjectModel(Project.name) private readonly projectModel: Model<ProjectDocument>) { }
+    constructor(@InjectModel(Project.name) private readonly projectModel: Model<ProjectDocument>) { }
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
 
-    const [req, _] = context.getArgs();  //otra manera de obtener request
-    //const req = context.switchToHttp().getRequest();
-    const { projectID } = req.params;
+        const [req, _] = context.getArgs();  //otra manera de obtener request
+        //const req = context.switchToHttp().getRequest();
+        const { projectID } = req.params;
 
-    if (!Types.ObjectId.isValid(projectID)) //duplico el pipe aqui ya que se ejecuta primero el guard
-      throw new BadRequestException(`PROJECT GUARD: Invalid ID format: ${projectID}`);
-    
-    const project = await this.projectModel.findById(projectID);
+        if (!Types.ObjectId.isValid(projectID)) //duplico el pipe aqui ya que se ejecuta primero el guard
+            throw new BadRequestException(`PROJECT GUARD: Invalid ID format: ${projectID}`);
 
-    if (!project) throw new NotFoundException(`Project with ID "${projectID}" not found`);
+        const project = await this.projectModel.findById(projectID);
 
-    req.project = project;
+        if (!project) throw new NotFoundException(`Project with ID "${projectID}" not found`);
 
-    return true;
-  }
+        req.project = project;
+
+        return true;
+    }
 }
