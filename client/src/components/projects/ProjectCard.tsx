@@ -4,6 +4,15 @@ import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { Link } from "react-router-dom"
 import { Fragment } from "react/jsx-runtime"
 
+function ManagerBadge(): React.ReactElement {
+    return <p className="font-bold text-xs uppercase bg-indigo-50 text-indigo-500 border-2 
+                        border-indigo-500 rounded-lg inline-block py-1 px-5">Manager</p>
+}
+
+function ColaboratorBadge(): React.ReactElement { 
+    return<p className="font-bold text-xs uppercase bg-green-50 text-green-500 border-2 
+                    border-green-500 rounded-lg inline-block py-1 px-5">Colaborator</p>
+}
 interface ProjectCardProps {
     project: ProjectOfListSchema;
     userID: User['_id'];
@@ -17,6 +26,15 @@ export default function ProjectCard({ project, userID, onDelete }: ProjectCardPr
             
             <div className="flex min-w-0 gap-x-4">
                 <div className="min-w-0 flex-auto space-y-2">
+
+                    <div className="mb-2">
+                        {
+                            (project.manager == userID) 
+                                ? <ManagerBadge />
+                                : <ColaboratorBadge />
+                        }
+                    </div>
+
                     <Link to={`/projects/${project._id}`}
                         className="text-gray-600 cursor-pointer hover:underline text-3xl font-bold">
                             {project.projectName}
@@ -34,6 +52,7 @@ export default function ProjectCard({ project, userID, onDelete }: ProjectCardPr
 
             <div className="flex shrink-0 items-center gap-x-6">
                 <Menu as="div" className="relative flex-none">
+                    
                     <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
                         <span className="sr-only">opciones</span>
                         <EllipsisVerticalIcon className="h-9 w-9" aria-hidden="true" />
@@ -73,6 +92,7 @@ export default function ProjectCard({ project, userID, onDelete }: ProjectCardPr
                             }
                         </MenuItems>
                     </Transition>
+
                 </Menu>
             </div>
         </li>
