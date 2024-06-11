@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
-import { UpdateNoteDto } from './dto/update-note.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Note, NoteDocument } from './model/note.schema';
+import { Model, Types } from 'mongoose';
+import { ResponseEntity } from 'src/utils/responses';
+import { UserDocument } from 'src/users/model/user.schema';
+import { TaskDocument } from 'src/tasks/model/task.schema';
 
 @Injectable()
 export class NotesService {
-  create(createNoteDto: CreateNoteDto) {
-    return 'This action adds a new note';
-  }
 
-  findAll() {
-    return `This action returns all notes`;
-  }
+    constructor(@InjectModel(Note.name) private readonly noteModel: Model<NoteDocument>,
+                @InjectModel(Note.name) private readonly taskModel: Model<TaskDocument>) { }
 
-  findOne(id: number) {
-    return `This action returns a #${id} note`;
-  }
+    async createNote(createNoteDto: CreateNoteDto, user: UserDocument, task: TaskDocument): Promise<ResponseEntity<Note>> {
 
-  update(id: number, updateNoteDto: UpdateNoteDto) {
-    return `This action updates a #${id} note`;
-  }
+        const newNote = await (await this.noteModel.create({ ...createNoteDto, task, createdBy: user._id })).depopulate('task')
+        
+        await this.taskModel.findByIdAndUpdate(task._id, { notes: [...task.notes, newNote._id as Types.ObjectId] })
 
-  remove(id: number) {
-    return `This action removes a #${id} note`;
-  }
+        return new ResponseEntity<Note>()
+            .setRecords(newNote)
+            .setTitle('createNote')
+            .setMessage('La Nota se creó correctamente')
+            .setStatus(200)
+            .build();
+    }
 }

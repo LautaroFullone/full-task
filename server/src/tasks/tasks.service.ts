@@ -17,7 +17,7 @@ interface ModelExt<T> extends Model<T> {
 export class TasksService {
 
     constructor(@InjectModel(Task.name) private readonly taskModel: ModelExt<TaskDocument>,
-        @InjectModel(Project.name) private readonly projectModel: ModelExt<TaskDocument>) { }
+                @InjectModel(Project.name) private readonly projectModel: ModelExt<TaskDocument>) { }
 
     async createTask(project: ProjectDocument, createTaskDto: CreateTaskDto): Promise<ResponseEntity<Task>> {
 

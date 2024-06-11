@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { NoteDocument } from 'src/notes/model/note.schema';
 import { ProjectDocument } from 'src/projects/model/project.schema';
 
 export const taskStatus = {
@@ -37,6 +38,9 @@ export class Task {
 
     @Prop({ type: [CompletedBy], default: [], ref:'User' })
     completedBy: CompletedBy[];
+
+    @Prop({ type: [Types.ObjectId], ref: 'Note' })
+    notes: NoteDocument[];
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

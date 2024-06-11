@@ -21,6 +21,8 @@ import { EmailAuthDto } from 'src/auth/dto/email-auth.dto';
 import { TeamService } from 'src/team/team.service';
 import { IdAuthDto } from 'src/auth/dto/id-auth.dto';
 import { HasAutorizationGuard } from 'src/utils/guards/has-autorization/has-autorization.guard';
+import { NotesService } from 'src/notes/notes.service';
+import { CreateNoteDto } from 'src/notes/dto/create-note.dto';
 
 @UseGuards(UserAutenticatedGuard)
 @Controller('projects')
@@ -28,7 +30,8 @@ export class ProjectsController {
 
     constructor(private readonly projectsService: ProjectsService,
                 private readonly tasksService: TasksService,
-                private readonly teamService: TeamService) { }
+                private readonly teamService: TeamService,
+                private readonly notesService: NotesService) { }
 
     @Post()
     createProject(@UserReq() user: UserDocument,
@@ -137,5 +140,15 @@ export class ProjectsController {
     deleteProjectMember(@ProjectReq() project: ProjectDocument,
                         @Param('userID', ObjectIdPipe) userID: UserDocument['_id']) {
         return this.teamService.deleteProjectMember(userID, project);
+    }
+
+    //---------------------<[ TASKS ]>---------------------
+
+    @Post(':projectID/tasks/:taskID/notes')
+    @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+    createNote(@TaskReq() task: TaskDocument,
+               @UserReq() user: UserDocument,
+               @Body() createNote: CreateNoteDto) { 
+        return this.notesService.createNote(createNote, user, task);
     }
 }

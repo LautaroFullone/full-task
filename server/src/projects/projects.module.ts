@@ -6,6 +6,7 @@ import { Project, ProjectSchema } from './model/project.schema';
 import { TasksModule } from 'src/tasks/tasks.module';
 import { Task, TaskSchema } from 'src/tasks/model/task.schema';
 import { TeamModule } from 'src/team/team.module';
+import { NotesModule } from 'src/notes/notes.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { TeamModule } from 'src/team/team.module';
       ]
     ),
     TasksModule,
-    TeamModule
+    TeamModule,
+    NotesModule
   ],
   controllers: [ProjectsController],
   providers: [ProjectsService],
