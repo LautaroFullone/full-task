@@ -62,6 +62,7 @@ export class ProjectsController {
     }
 
     @Delete(':projectID')
+    @UseGuards(ProjectExistsGuard)
     deleteProject(@UserReq() user: UserDocument,
                   @ProjectReq() project: ProjectDocument) {
         return this.projectsService.deleteProject(user, project);

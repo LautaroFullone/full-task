@@ -50,7 +50,6 @@ export class ProjectsService {
         const project = await this.projectModel.findById(id)
             .populate(['tasks', 'tasks.createdBy.user']);
 
-
         if(!project) throw new NotFoundException(`Project with ID "${id}" not found`);
         
         if(project.manager.toString() !== user._id.toString()
@@ -67,7 +66,8 @@ export class ProjectsService {
 
     async updateProject(user: UserDocument, project: ProjectDocument, updateProjectDto: UpdateProjectDto): Promise<ResponseEntity<Project>> {
 
-        if(project.manager.toString() !== user._id.toString()) throw new ForbiddenException('Solo el manager puede editar un proyecto');
+        if(project.manager.toString() !== user._id.toString()) 
+            throw new ForbiddenException('Solo el manager puede editar un proyecto');
 
         const updatedProject = await this.projectModel.findByIdAndUpdate(project._id, updateProjectDto, { new: true })
 
@@ -81,11 +81,12 @@ export class ProjectsService {
 
     async deleteProject(user: UserDocument, project: ProjectDocument): Promise<ResponseEntity<Project>> {
 
-        if(project.manager.toString() !== user._id.toString()) throw new ForbiddenException('Solo el manager puede editar un proyecto');
+        if(project.manager.toString() !== user._id.toString()) 
+            throw new ForbiddenException('Solo el manager puede editar un proyecto');
 
         const deletedProject = await this.projectModel.findByIdAndDelete(project.id);
 
-        if (!deletedProject) throw new NotFoundException(`Project with ID "${project.id}" not found`);
+        if(!deletedProject) throw new NotFoundException(`Project with ID "${project.id}" not found`);
 
         return new ResponseEntity<Project>()
             .setRecords(deletedProject)
