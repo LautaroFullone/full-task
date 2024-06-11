@@ -42,7 +42,7 @@ export async function getProjectById(id: Project['_id']) {
     try {
         const { data } = await api.get(`/projects/${id}`)
         const response = responseProjectSchema.safeParse(data);
-
+      
         if (!response.success) throw new Error('Error parsing response');
 
         return response.data

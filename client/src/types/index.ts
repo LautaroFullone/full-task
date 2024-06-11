@@ -20,7 +20,7 @@ export type NewPasswordFormData = Pick<Auth, 'password' | 'passwordConfirmation'
 
 
 export const userSchema = z.object({
-    _id: z.string(), 
+    _id: z.string(),
     name: z.string(),
     email: z.string(),
     confirmed: z.boolean(),
@@ -51,20 +51,21 @@ export const projectSchema = z.object({ //para validar lo que envia la api
     projectName: z.string(),
     clientName: z.string(),
     description: z.string(),
-    tasks: z.array(taskSchema)
+    tasks: z.array(taskSchema),
+    manager: z.string()
 })
 
-export const projectsListSchema = z.array( 
-    projectSchema.pick({
-        _id: true,
-        projectName: true,
-        clientName: true,
-        description: true
-    })
-)
+export const projectOfListSchema = projectSchema.pick({
+    _id: true,
+    projectName: true,
+    clientName: true,
+    description: true,
+    manager: true
+})
 
 //creamos un type TS a traves del schema
 export type Project = z.infer<typeof projectSchema>
+export type ProjectOfListSchema = z.infer<typeof projectOfListSchema>
 //creamos otro type pero sin el ID
 export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'description'>
 
@@ -89,9 +90,10 @@ export const responseProjectSchema = responseEntitySchema.merge(
     z.object({ records: projectSchema })
 )
 
-export const responseProjectsListSchema = responseEntitySchema.merge(
-    z.object({ records: z.array(projectSchema) })
-)
+
+export const responseProjectsListSchema = responseEntitySchema.extend({
+    records: z.array(projectOfListSchema)
+});
 
 export const responseTaskSchema = responseEntitySchema.merge(
     z.object({ records: taskSchema })
