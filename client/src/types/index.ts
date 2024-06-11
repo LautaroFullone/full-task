@@ -31,13 +31,13 @@ export type User = z.infer<typeof userSchema>
 export const taskStatusShema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
 export type TaskStatus = z.infer<typeof taskStatusShema>
 
-
 export const taskSchema = z.object({
     _id: z.string(),
     taskName: z.string(),
     description: z.string(),
     status: taskStatusShema,
     project: z.string(),
+    completedBy: userSchema.pick({ _id: true, name: true, email: true }).or(z.string()).or(z.null()),
     createdAt: z.string(),
     updatedAt: z.string(),
 })
@@ -89,7 +89,6 @@ const responseEntitySchema = z.object({
 export const responseProjectSchema = responseEntitySchema.merge(
     z.object({ records: projectSchema })
 )
-
 
 export const responseProjectsListSchema = responseEntitySchema.extend({
     records: z.array(projectOfListSchema)

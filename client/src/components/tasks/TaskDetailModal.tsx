@@ -58,7 +58,8 @@ export default function TaskDetailModal({ projectID }: TaskDetailModalProps) {
     }
 
     if (data) {
-        const task = data.records;
+        const taskDetail = data.records;
+
         return (
             <>
                 <Transition appear show={!!viewTaskID} as={Fragment}>
@@ -87,18 +88,29 @@ export default function TaskDetailModal({ projectID }: TaskDetailModalProps) {
                                     leaveTo="opacity-0 scale-95"
                                 >
                                     <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
-                                        <p className='text-sm text-slate-400'>Agregada el: { formatDate(task.createdAt) }</p>
-                                        <p className='text-sm text-slate-400'>Última actualización: { formatDate(task.updatedAt) }</p>
-                                        <Dialog.Title
-                                            as="h3"
-                                            className="font-black text-4xl text-slate-600 my-5"
-                                        >{task.taskName}
+                                        <p className='text-sm text-slate-400'>Agregada el: {formatDate(taskDetail.createdAt) }</p>
+                                        <p className='text-sm text-slate-400'>Última actualización: {formatDate(taskDetail.updatedAt) }</p>
+                                        
+                                        <Dialog.Title as="h3"
+                                            className="font-black text-4xl text-slate-600 my-5">
+                                            {taskDetail.taskName}
                                         </Dialog.Title>
-                                        <p className='text-lg text-slate-500 mb-2'>Descripción: {task.description}</p>
+
+                                        <p className='text-lg text-slate-500 mb-2'>Descripción: {taskDetail.description}</p>
+                                        
+                                        {
+                                            taskDetail.completedBy
+                                                ? <p>
+                                                    <span className="font-bold text-slate-600">Estado actualizado por: </span>
+                                                    {taskDetail.completedBy.name}
+                                                </p>
+                                                : null
+                                        }
+                                    
                                         <div className='my-5 space-y-3'>
                                             <label className='font-bold'>Estado Actual:</label>
                                             
-                                            <select defaultValue={task.status} className="w-full p-3 border border-gray-300" onChange={handleStatusChange}>
+                                            <select defaultValue={taskDetail.status} className="w-full p-3 border border-gray-300" onChange={handleStatusChange}>
                                                 { Object.entries(statusTranslations).map( ([key, value]) => 
                                                         <option key={key} value={key}>{value}</option>) }
                                             </select>

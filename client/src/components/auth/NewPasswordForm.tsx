@@ -26,7 +26,6 @@ export default function NewPasswordForm({ code }: NewPasswordFormProps) {
         onSuccess: (response) => {
             toast.success(response.message);
             reset();
-            console.log(location.pathname + '/auth/login')
             navigate(location.pathname+'/auth/login')
         },
         onError: (response) => {

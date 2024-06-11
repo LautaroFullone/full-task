@@ -36,7 +36,6 @@ export default function TaskEditor({ task, taskID, projectID }: ProjectEditorPro
     })
 
     function onSubmit(formData: TaskFormData) {
-        console.log('formData:' ,formData)
         mutation.mutate({ projectID, taskID, newData: formData })
     }
 

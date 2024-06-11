@@ -83,7 +83,7 @@ export class ProjectsController {
     @Get(':projectID/tasks/:taskID')
     @UseGuards(ProjectExistsGuard, TaskExistsGuard)
     getTaskById(@TaskReq() task: TaskDocument) {
-        return this.tasksService.getTaskById(task);
+        return this.tasksService.getTaskById(task._id);
     }
 
     @Patch(':projectID/tasks/:taskID')
@@ -98,8 +98,9 @@ export class ProjectsController {
     @UseGuards(ProjectExistsGuard, TaskExistsGuard)
     updateTaskStatus(
         @TaskReq() task: TaskDocument,
+        @UserReq() user: UserDocument,
         @Body() status: UpdateTaskStatusDto) {
-        return this.tasksService.updateTaskStatus(task, status.status);
+        return this.tasksService.updateTaskStatus(task, status.status, user);
     }
 
     @Delete(':projectID/tasks/:taskID')

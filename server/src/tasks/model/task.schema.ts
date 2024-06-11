@@ -14,6 +14,10 @@ export type TaskStatus = typeof taskStatus[keyof typeof taskStatus]
 
 export type TaskDocument = HydratedDocument<Task>;
 
+const CompletedBy = {
+    user: Types.ObjectId,
+    taskStatus: Object.values(taskStatus) 
+} 
 @Schema({ timestamps: true })
 export class Task {
 
@@ -28,6 +32,15 @@ export class Task {
 
     @Prop({ type: Types.ObjectId, ref: 'Project' })
     project: ProjectDocument;
+
+    // @Prop({ type: Types.ObjectId, ref: 'User' })
+    // completedBy: UserDocument;
+
+    @Prop({ type: [CompletedBy], default: [], ref:'User' })
+    completedBy: [{
+        user: Types.ObjectId,
+        taskStatus: TaskStatus
+    }];
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

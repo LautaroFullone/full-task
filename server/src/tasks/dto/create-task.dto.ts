@@ -1,5 +1,4 @@
 import { IsEnum, IsNotEmpty } from "class-validator"
-import { TaskStatus, taskStatus } from "../model/task.schema";
 
 export class CreateTaskDto {
     
@@ -11,5 +10,4 @@ export class CreateTaskDto {
 
     //@IsEnum(taskStatus)  //para mostrar las opciones aceptadas al momento de lanzar error
     //status: TaskStatus;
-
 }
