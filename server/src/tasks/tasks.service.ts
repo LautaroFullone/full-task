@@ -21,14 +21,14 @@ export class TasksService {
 
     async createTask(project: ProjectDocument, createTaskDto: CreateTaskDto): Promise<ResponseEntity<Task>> {
 
-        const newTask = (await this.taskModel.create({ ...createTaskDto, project }))
+        const newTask = await this.taskModel.create({ ...createTaskDto, project })
 
         await this.projectModel.findByIdAndUpdate(project._id, { tasks: [...project.tasks, newTask._id as Types.ObjectId] })
 
         return new ResponseEntity<Task>()
             .setRecords(newTask)
             .setTitle('createTask')
-            .setMessage('Tasks was successfully created')
+            .setMessage('La Tarea se creó correctamente')
             .setStatus(200)
             .build();
     }
@@ -37,37 +37,38 @@ export class TasksService {
 
         const tasksList = await this.taskModel.find({ project: project._id })
 
-        //if(tasksList.length == 0) throw new EmptyListException('tasks');
-
         return new ResponseEntity<Task[]>()
             .setRecords(tasksList)
             .setTitle('getAllTasksByProjectId')
-            .setMessage('Tasks were successfully found')
+            .setMessage('Las Tareas del usuario han sido encontradas')
             .setStatus(200)
             .build();
     }
 
     async getTaskById(taskID: TaskDocument['_id']): Promise<ResponseEntity<Task>> {
 
-        const task = await this.taskModel.findById(taskID).populate(
-            { path: 'completedBy', select: 'id name email'})
+        const task = await this.taskModel.findById(taskID).populate({
+            path: 'completedBy.user',
+            model: 'User',
+            select: '_id email name'
+        })
 
         return new ResponseEntity<Task>()
             .setRecords(task)
             .setTitle('getTaskById')
-            .setMessage('Task was successfully found')
+            .setMessage('La Tarea ha sido encontrada')
             .setStatus(200)
             .build();
     }
 
-    async updateTask(task: TaskDocument, updateTaskDto: UpdateTaskDto) {
+    async updateTask(task: TaskDocument, updateTaskDto: UpdateTaskDto): Promise<ResponseEntity<Task>> {
 
         const taskUpdated = await this.taskModel.findByIdAndUpdate(task._id, updateTaskDto, { new: true })
 
         return new ResponseEntity<Task>()
             .setRecords(taskUpdated)
             .setTitle('updateTask')
-            .setMessage('Task was updated')
+            .setMessage('La Tarea ha sido actualizada')
             .setStatus(200)
             .build();
     }
@@ -75,16 +76,16 @@ export class TasksService {
     async updateTaskStatus(task: TaskDocument, newStatus: Task['status'], user: UserDocument): Promise<ResponseEntity<Task>> {
 
         task.status = newStatus;
-
+        
         if(task.status !== taskStatus.PENDING)
-            task.completedBy.push({user: user._id, taskStatus: newStatus})
+            task.completedBy.push({ user: user._id, status: newStatus, _id: new Types.ObjectId() })
 
         const taskUpdated = await task.save();
 
         return new ResponseEntity<Task>()
             .setRecords(taskUpdated)
             .setTitle('updateTaskStatus')
-            .setMessage('Task status was successfully updated')
+            .setMessage('El estado de la Tarea ha sido actualizado')
             .setStatus(200)
             .build();
     }
@@ -101,7 +102,7 @@ export class TasksService {
         return new ResponseEntity<Task>()
             .setRecords(taskToDelete)
             .setTitle('deleteTask')
-            .setMessage('Task was successfully deleted')
+            .setMessage('La tarea ha sido eliminada')
             .setStatus(200)
             .build();
     }

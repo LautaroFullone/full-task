@@ -23,21 +23,26 @@ export const userSchema = z.object({
     _id: z.string(),
     name: z.string(),
     email: z.string(),
-    confirmed: z.boolean(),
 })
 
 export type User = z.infer<typeof userSchema>
 //---------------------<[ TASKS ]>---------------------
-export const taskStatusShema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
-export type TaskStatus = z.infer<typeof taskStatusShema>
+const taskStatusSchema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
+export type TaskStatus = z.infer<typeof taskStatusSchema>
 
 export const taskSchema = z.object({
     _id: z.string(),
     taskName: z.string(),
     description: z.string(),
-    status: taskStatusShema,
+    status: taskStatusSchema,
     project: z.string(),
-    completedBy: userSchema.pick({ _id: true, name: true, email: true }).or(z.string()).or(z.null()),
+    completedBy: z.array(
+        z.object({
+            _id: z.string(),
+            user: userSchema,
+            status: taskStatusSchema
+        })
+    ),
     createdAt: z.string(),
     updatedAt: z.string(),
 })
@@ -51,7 +56,7 @@ export const projectSchema = z.object({ //para validar lo que envia la api
     projectName: z.string(),
     clientName: z.string(),
     description: z.string(),
-    tasks: z.array(taskSchema),
+    tasks: z.array(taskSchema.omit({ completedBy: true })),
     manager: z.string()
 })
 
@@ -86,17 +91,17 @@ const responseEntitySchema = z.object({
     status: z.number(),
 })
 
-export const responseProjectSchema = responseEntitySchema.merge(
-    z.object({ records: projectSchema })
-)
+export const responseProjectSchema = responseEntitySchema.extend({
+    records: projectSchema
+});
 
 export const responseProjectsListSchema = responseEntitySchema.extend({
     records: z.array(projectOfListSchema)
 });
 
-export const responseTaskSchema = responseEntitySchema.merge(
-    z.object({ records: taskSchema })
-)
+export const responseTaskSchema = responseEntitySchema.extend({
+   records: taskSchema 
+})
 
 export const responseTasksListSchema = responseEntitySchema.merge(
     z.object({ records: z.array(taskSchema) })

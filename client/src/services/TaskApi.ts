@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios";
 import { isAxiosError } from "axios";
-import { Project, Task, TaskFormData } from "@/types/index";
+import { Project, Task, TaskFormData, responseTaskSchema } from "@/types/index";
 
 export async function createTask({ projectID, taskData }: { projectID: Project['_id'], taskData: TaskFormData }) {
     try {
@@ -21,12 +21,11 @@ export async function createTask({ projectID, taskData }: { projectID: Project['
 export async function getTaskById({ projectID, taskID }: { projectID: Project['_id'], taskID: Task['_id'] }) {
     try {
         const { data } = await api.get(`/projects/${projectID}/tasks/${taskID}`)
-        return data;
-        //const response = responseTaskSchema.safeParse(data);
+        const response = responseTaskSchema.safeParse(data);
+        
+        if(!response.success) throw new Error('Error parsing response');
 
-        // if (!response.success) throw new Error('Error parsing response');
-
-        // return response.data
+        return response.data
 
     } catch (error) {
         console.log('# ERROR: getTaskById', error)

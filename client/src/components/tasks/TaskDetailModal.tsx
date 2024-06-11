@@ -2,7 +2,7 @@ import { statusTranslations } from "@/locales/es";
 import { getTaskById, updateTaskStatus } from "@/services/TaskApi";
 import { Project, TaskStatus } from "@/types/index";
 import { formatDate } from "@/utils/utils";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -64,7 +64,7 @@ export default function TaskDetailModal({ projectID }: TaskDetailModalProps) {
             <>
                 <Transition appear show={!!viewTaskID} as={Fragment}>
                     <Dialog as="div" className="relative z-10" onClose={closeModal}>
-                        <Transition.Child
+                        <TransitionChild
                             as={Fragment}
                             enter="ease-out duration-300"
                             enterFrom="opacity-0"
@@ -74,11 +74,11 @@ export default function TaskDetailModal({ projectID }: TaskDetailModalProps) {
                             leaveTo="opacity-0"
                         >
                             <div className="fixed inset-0 bg-black/60" />
-                        </Transition.Child>
+                        </TransitionChild>
 
                         <div className="fixed inset-0 overflow-y-auto">
                             <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                <Transition.Child
+                                <TransitionChild
                                     as={Fragment}
                                     enter="ease-out duration-300"
                                     enterFrom="opacity-0 scale-95"
@@ -87,25 +87,31 @@ export default function TaskDetailModal({ projectID }: TaskDetailModalProps) {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
+                                    <DialogPanel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
                                         <p className='text-sm text-slate-400'>Agregada el: {formatDate(taskDetail.createdAt) }</p>
                                         <p className='text-sm text-slate-400'>Última actualización: {formatDate(taskDetail.updatedAt) }</p>
                                         
-                                        <Dialog.Title as="h3"
+                                        <DialogTitle as="h3"
                                             className="font-black text-4xl text-slate-600 my-5">
                                             {taskDetail.taskName}
-                                        </Dialog.Title>
+                                        </DialogTitle>
 
                                         <p className='text-lg text-slate-500 mb-2'>Descripción: {taskDetail.description}</p>
                                         
-                                        {
-                                            taskDetail.completedBy
-                                                ? <p>
-                                                    <span className="font-bold text-slate-600">Estado actualizado por: </span>
-                                                    {taskDetail.completedBy.name}
-                                                </p>
-                                                : null
-                                        }
+                                        <p className='text-2xl text-slate-500 mb-2'>Historial de Cambios: </p>
+                                        
+                                        <ul className="list-decimal">
+                                            {
+                                                taskDetail.completedBy.map( (activityLog) => 
+                                                    <li key={activityLog._id}>
+                                                        <span className="font-bold text-slate-600">
+                                                            { statusTranslations[activityLog.status] }
+                                                        </span> {''}
+                                                        { activityLog.user.name }
+                                                    </li>
+                                                )
+                                            }
+                                        </ul>
                                     
                                         <div className='my-5 space-y-3'>
                                             <label className='font-bold'>Estado Actual:</label>
@@ -116,8 +122,8 @@ export default function TaskDetailModal({ projectID }: TaskDetailModalProps) {
                                             </select>
 
                                         </div>
-                                    </Dialog.Panel>
-                                </Transition.Child>
+                                    </DialogPanel>
+                                </TransitionChild>
                             </div>
                         </div>
                     </Dialog>

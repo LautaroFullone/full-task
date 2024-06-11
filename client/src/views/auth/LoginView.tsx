@@ -25,7 +25,7 @@ export default function LoginView() {
         },
         onError: (response) => {
             toast.error(response.message)
-        }
+        } 
     })
 
     function onSubmit(formData: LoginFormData){
