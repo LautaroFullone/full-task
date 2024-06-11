@@ -1,4 +1,5 @@
 import { ProjectOfListSchema, User } from "@/types/index"
+import { isManager } from "@/utils/policies"
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react"
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { Link } from "react-router-dom"
@@ -29,7 +30,7 @@ export default function ProjectCard({ project, userID, onDelete }: ProjectCardPr
 
                     <div className="mb-2">
                         {
-                            (project.manager == userID) 
+                            isManager(project.manager, userID) 
                                 ? <ManagerBadge />
                                 : <ColaboratorBadge />
                         }

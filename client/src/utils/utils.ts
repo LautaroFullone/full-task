@@ -10,3 +10,4 @@ export function formatDate(isoString: string): string {
 
     return formatter.format(date);
 }
+
