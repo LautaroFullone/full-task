@@ -47,11 +47,9 @@ export class TasksService {
 
     async getTaskById(taskID: TaskDocument['_id']): Promise<ResponseEntity<Task>> {
 
-        const task = await this.taskModel.findById(taskID).populate({
-            path: 'completedBy.user',
-            model: 'User',
-            select: '_id email name'
-        })
+        const task = await this.taskModel.findById(taskID)
+            .populate({ path: 'completedBy.user', model: 'User', select: '_id email name'})
+            .populate({ path: 'notes', model: 'Note', populate: { path: 'createdBy', model: 'User', select: '_id email name' }})
 
         return new ResponseEntity<Task>()
             .setRecords(task)

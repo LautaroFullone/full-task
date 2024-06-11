@@ -152,4 +152,10 @@ export class ProjectsController {
                @Body() createNote: CreateNoteDto) { 
         return this.notesService.createNote(createNote, user, task);
     }
+    
+    @Get(':projectID/tasks/:taskID/notes')
+    @UseGuards(ProjectExistsGuard, TaskExistsGuard)
+    getAllNotesByTaskId(@TaskReq() task: TaskDocument){
+        return this.notesService.getAllNotesByTaskId(task);
+    }
 }
