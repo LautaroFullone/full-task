@@ -12,6 +12,7 @@ import { EventMailModule } from './mail/event-mail.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { RegisterCodesModule } from './register-codes/register-codes.module';
 import { TeamModule } from './team/team.module';
+import { NotesModule } from './notes/notes.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { TeamModule } from './team/team.module';
     MailModule,
     EventMailModule,
     RegisterCodesModule,
-    TeamModule
+    TeamModule,
+    NotesModule
   ],
   controllers: [AppController],
   providers: [AppService],
