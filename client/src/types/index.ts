@@ -18,7 +18,6 @@ export type RequestRegisterCodeFormData = Pick<Auth, 'email'>
 export type ForgotPasswordFormData = Pick<Auth, 'email'>
 export type NewPasswordFormData = Pick<Auth, 'password' | 'passwordConfirmation'>
 
-
 export const userSchema = z.object({
     _id: z.string(),
     name: z.string(),
@@ -26,6 +25,7 @@ export const userSchema = z.object({
 })
 
 export type User = z.infer<typeof userSchema>
+
 //---------------------<[ TASKS ]>---------------------
 const taskStatusSchema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
 export type TaskStatus = z.infer<typeof taskStatusSchema>
@@ -83,6 +83,17 @@ export const teamMemberSchema = userSchema.pick({
 
 export type TeamMember = z.infer<typeof teamMemberSchema>
 export type TeamMemberFormData = Pick<TeamMember, 'email'>
+
+//---------------------<[ TEAM ]>--------------------
+export const noteSchema = z.object({
+    _id: z.string(),
+    content: z.string(),
+    createdBy: userSchema,
+    task: z.string()
+})
+
+export type Note = z.infer<typeof noteSchema>
+export type NoteFormData = Pick<Note, 'content'>
 
 //---------------------<[ RESPONSE ENTITY ]>---------------------
 const responseEntitySchema = z.object({

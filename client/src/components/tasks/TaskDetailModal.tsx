@@ -8,6 +8,7 @@ import { ChangeEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Fragment } from "react/jsx-runtime";
+import NotesPanel from "../notes/NotesPanel";
 
 interface TaskDetailModalProps {
     projectID: Project['_id']
@@ -98,21 +99,26 @@ export default function TaskDetailModal({ projectID }: TaskDetailModalProps) {
 
                                         <p className='text-lg text-slate-500 mb-2'>Descripción: {taskDetail.description}</p>
                                         
-                                        <p className='text-2xl text-slate-500 mb-2'>Historial de Cambios: </p>
-                                        
-                                        <ul className="list-decimal">
-                                            {
-                                                taskDetail.completedBy.map( (activityLog) => 
-                                                    <li key={activityLog._id}>
-                                                        <span className="font-bold text-slate-600">
-                                                            { statusTranslations[activityLog.status] }
-                                                        </span> {''}
-                                                        { activityLog.user.name }
-                                                    </li>
-                                                )
-                                            }
-                                        </ul>
-                                    
+                                        { 
+                                            taskDetail.completedBy.length &&
+                                                <>
+                                                    <p className='text-2xl text-slate-500 mb-2'>Historial de Cambios: </p>
+
+                                                    <ul className="list-decimal">
+                                                        {
+                                                            taskDetail.completedBy.map((activityLog) =>
+                                                                <li key={activityLog._id}>
+                                                                    <span className="font-bold text-slate-600">
+                                                                        {statusTranslations[activityLog.status]}
+                                                                    </span> {''}
+                                                                    {activityLog.user.name}
+                                                                </li>
+                                                            )
+                                                        }
+                                                    </ul>
+                                                </>
+                                        }
+
                                         <div className='my-5 space-y-3'>
                                             <label className='font-bold'>Estado Actual:</label>
                                             
@@ -122,6 +128,9 @@ export default function TaskDetailModal({ projectID }: TaskDetailModalProps) {
                                             </select>
 
                                         </div>
+
+                                        <NotesPanel taskID={taskDetail._id} projectID={projectID}/>
+
                                     </DialogPanel>
                                 </TransitionChild>
                             </div>
