@@ -15,17 +15,17 @@ export class TaskExistsGuard implements CanActivate {
         const { project } = req;
         const { taskID } = req.params;
 
-        if (!Types.ObjectId.isValid(taskID)) //duplico el pipe aqui ya que se ejecuta primero el guard
+        if(!Types.ObjectId.isValid(taskID)) //duplico el pipe aqui ya que se ejecuta primero el guard
             throw new BadRequestException(`TASK GUARD: Invalid ID format: ${taskID}`);
 
         const task = await this.taskModel.findById(taskID);
 
-        if (!task) throw new NotFoundException(`Task with ID "${taskID}" not found`);
+        if(!task) throw new NotFoundException(`No se encontró una Tarea con el ID"${taskID}"`);
 
-        if (!project) throw new NotFoundException(`Project is missing in request`);
+        if(!project) throw new NotFoundException(`No se encontró el Proyecto`);
 
         //si la task no pertenece al project enviado, lanza error
-        if (task.project.toString() !== project._id.toString())
+        if(task.project.toString() !== project._id.toString())
             throw new InvalidRelationshipException;
 
         req.task = task;

@@ -158,4 +158,12 @@ export class ProjectsController {
     getAllNotesByTaskId(@TaskReq() task: TaskDocument){
         return this.notesService.getAllNotesByTaskId(task);
     }
+
+    @Delete(':projectID/tasks/:taskID/notes/:noteID')
+    @UseGuards(ProjectExistsGuard, TaskExistsGuard, HasAutorizationGuard)
+    deleteNote(@TaskReq() task: TaskDocument,
+               @UserReq() user: UserDocument,
+               @Param('noteID', ObjectIdPipe) noteID: UserDocument['_id']) {
+        return this.notesService.deleteNote(noteID, user, task);
+    }
 }

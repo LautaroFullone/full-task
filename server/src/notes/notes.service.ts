@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Note, NoteDocument } from './model/note.schema';
@@ -6,6 +6,7 @@ import { Model, Types } from 'mongoose';
 import { ResponseEntity } from 'src/utils/responses';
 import { UserDocument } from 'src/users/model/user.schema';
 import { Task, TaskDocument } from 'src/tasks/model/task.schema';
+import { InvalidRelationshipException } from 'src/utils/exceptions/invalid-relationship.exception';
 
 @Injectable()
 export class NotesService {
@@ -22,8 +23,8 @@ export class NotesService {
         return new ResponseEntity<Note>()
             .setRecords(newNote)
             .setTitle('createNote')
-            .setMessage('La Nota se creó correctamente')
-            .setStatus(200)
+            .setMessage('Nota creada correctamente')
+            .setStatus(204)
             .build();
     }
 
@@ -34,7 +35,31 @@ export class NotesService {
         return new ResponseEntity<Note[]>()
             .setRecords(noteList)
             .setTitle('getAllTasksByTaskId')
-            .setMessage('Las Notas de la task han sido encontradas')
+            .setMessage('Notas encontradas')
+            .setStatus(200)
+            .build();
+    }
+
+    async deleteNote(noteID: NoteDocument['_id'], user: UserDocument, task: TaskDocument): Promise<ResponseEntity<Note>> {
+
+        const noteToDelete = await this.noteModel.findById(noteID)
+
+        if (!noteToDelete) throw new NotFoundException(`No se encontró una Nota con ID ${noteID}`);
+
+        if (noteToDelete.createdBy.toString() !== user._id.toString())
+            throw new InvalidRelationshipException;
+
+        task.notes = task.notes.filter(notes => notes._id.toString() != noteToDelete._id.toString())
+
+        await Promise.allSettled([
+            await noteToDelete.deleteOne(),
+            task.save()
+        ]);
+
+        return new ResponseEntity<Note>()
+            .setRecords(noteToDelete)
+            .setTitle('deleteNote')
+            .setMessage('Nota eliminada correctamente')
             .setStatus(200)
             .build();
     }

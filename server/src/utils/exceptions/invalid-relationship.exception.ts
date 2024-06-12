@@ -2,6 +2,6 @@ import { HttpStatus, HttpException } from '@nestjs/common';
 
 export class InvalidRelationshipException extends HttpException {
     constructor() {
-        super('Ivalid relationship between documents', HttpStatus.BAD_REQUEST);
+        super('Relación invalida entre los documentos', HttpStatus.BAD_REQUEST);
     }
 }
