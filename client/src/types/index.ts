@@ -26,6 +26,18 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>
 
+//---------------------<[ TEAM ]>--------------------
+export const noteSchema = z.object({
+    _id: z.string(),
+    content: z.string(),
+    createdBy: userSchema,
+    task: z.string(),
+    createdAt: z.string()
+})
+
+export type Note = z.infer<typeof noteSchema>
+export type NoteFormData = Pick<Note, 'content'>
+
 //---------------------<[ TASKS ]>---------------------
 const taskStatusSchema = z.enum(['pending', 'onHold', 'inProgress', 'underReview', 'completed'])
 export type TaskStatus = z.infer<typeof taskStatusSchema>
@@ -43,6 +55,11 @@ export const taskSchema = z.object({
             status: taskStatusSchema
         })
     ),
+    notes: z.array(
+        noteSchema.extend({
+            createdBy: userSchema
+        })
+    ),
     createdAt: z.string(),
     updatedAt: z.string(),
 })
@@ -56,7 +73,7 @@ export const projectSchema = z.object({ //para validar lo que envia la api
     projectName: z.string(),
     clientName: z.string(),
     description: z.string(),
-    tasks: z.array(taskSchema.omit({ completedBy: true })),
+    tasks: z.array(taskSchema),
     manager: z.string()
 })
 
@@ -83,17 +100,6 @@ export const teamMemberSchema = userSchema.pick({
 
 export type TeamMember = z.infer<typeof teamMemberSchema>
 export type TeamMemberFormData = Pick<TeamMember, 'email'>
-
-//---------------------<[ TEAM ]>--------------------
-export const noteSchema = z.object({
-    _id: z.string(),
-    content: z.string(),
-    createdBy: userSchema,
-    task: z.string()
-})
-
-export type Note = z.infer<typeof noteSchema>
-export type NoteFormData = Pick<Note, 'content'>
 
 //---------------------<[ RESPONSE ENTITY ]>---------------------
 const responseEntitySchema = z.object({

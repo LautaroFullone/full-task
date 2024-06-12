@@ -25,7 +25,6 @@ export default function DetailProjectView() {
     //almacena el resultado de la funcion cuando alguna de las dependencias cambia
     const canEdit = useMemo(() => data?.records.manager === user?._id, [data, user])
 
-
     if(isLoading && isUserLoading) return 'Cargando...'
     if(isError) return <Navigate to={'error'} />
     if(data && user) return (
@@ -33,26 +32,26 @@ export default function DetailProjectView() {
             <h1 className="text-5xl font-black">{data.records.projectName}</h1>
             <p className="text-2xl font-light text-gray-500 mt-5">{data.records.description}</p>
 
-            { 
-                isManager(data.records.manager, user._id) && 
-                    <nav className="my-5 flex gap-3">
-                        <button type="button"
-                            onClick={() => navigate('?newTask=true')} 
-                            className="bg-purple-400 hover:bg-purple-500 px-10 py-3
+            {
+                isManager(data.records.manager, user._id) &&
+                <nav className="my-5 flex gap-3">
+                    <button type="button"
+                        onClick={() => navigate('?newTask=true')}
+                        className="bg-purple-400 hover:bg-purple-500 px-10 py-3
                             text-white text-xl font-bold cursor-pointer transition-colors">
-                            Agregar Tarea
-                        </button>
+                        Agregar Tarea
+                    </button>
 
-                        <Link to={'team'}
-                            className="bg-fuchsia-600 hover:bg-fuchsia-700 px-10 py-3
+                    <Link to={'team'}
+                        className="bg-fuchsia-600 hover:bg-fuchsia-700 px-10 py-3
                             text-white text-xl font-bold cursor-pointer transition-colors">
-                            Colaboradores
-                        </Link>
-                    </nav>   
+                        Colaboradores
+                    </Link>
+                </nav>
             }
 
-            <TasksList tasks={data.records.tasks} 
-                canUserEdit={canEdit} 
+            <TasksList tasks={data.records.tasks}
+                canUserEdit={canEdit}
                 projectID={projectID!} />
 
             <TaskCreateModal projectID={projectID!} />

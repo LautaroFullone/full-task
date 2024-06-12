@@ -48,7 +48,27 @@ export class ProjectsService {
     async getProjectById(user: UserDocument, id: ProjectDocument['_id']): Promise<ResponseEntity<Project>> {
 
         const project = await this.projectModel.findById(id)
-            .populate(['tasks', 'tasks.createdBy.user']);
+            .populate('tasks')
+            .populate({ 
+                path: 'tasks',
+                populate: {
+                    path: 'completedBy.user',
+                    model: 'User',
+                    select: '_id email name'
+                } 
+            }) 
+            .populate({ 
+                path: 'tasks',
+                populate: {
+                    path: 'notes',
+                    model: 'Note',
+                    populate: {
+                        path: 'createdBy',
+                        model: 'User',
+                        select: '_id email name'
+                    }
+                } 
+            })
 
         if(!project) throw new NotFoundException(`Project with ID "${id}" not found`);
         

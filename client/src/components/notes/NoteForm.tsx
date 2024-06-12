@@ -1,7 +1,7 @@
 import { NoteFormData, Project, Task } from "@/types/index";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNote } from "@/services/NoteApi";
 import { toast } from "react-toastify";
 
@@ -15,19 +15,17 @@ export default function NoteForm({ taskID, projectID }: NoteFormProps) {
     const initialValues: NoteFormData = {
         content: ''
     }
-    // const navigate = useNavigate();
+
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues: initialValues })
 
-    // const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
     const mutation = useMutation({
         mutationFn: createNote,
         onSuccess: (response) => {
             reset();
-            // queryClient.invalidateQueries({ queryKey: ['getAllProjects'] }) //volver a ejecutar api call que estaba en cache
-            // queryClient.invalidateQueries({ queryKey: ['editProject', projectID] })
+            queryClient.invalidateQueries({ queryKey: ['getTask', taskID] }) 
             toast.success(response.message);
-            //navigate('/');
         },
         onError: (response) => {
             toast.error(response.message);
