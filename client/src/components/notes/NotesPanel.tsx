@@ -20,7 +20,10 @@ export default function NotesPanel({ notes, taskID, projectID }: NotesPanelProps
                         ?   <p className="text-gray-500 text-center pt-3">No hay notas</p>
                         :   <>
                                 <p className="font-bold text-2xl text-slate-600 my-5">Notas: </p>
-                                { notes.map(note => <NoteCard key={note._id} note={note} />) }
+                                { 
+                                    notes.map(note => 
+                                        <NoteCard key={note._id} note={note} projectID={projectID} taskID={taskID} />) 
+                                }
                             </>
                 }
 
