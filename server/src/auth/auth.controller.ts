@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterAuthDto } from 'src/auth/dto/register-auth.dto';
 import { LoginAuthDto } from 'src/auth/dto/login-auth.dto';
@@ -8,6 +8,8 @@ import { ResetPasswordAuthDto } from './dto/reset-password-auth.dto';
 import { UserAutenticatedGuard } from 'src/utils/guards/user-autenticated/user-autenticated.guard';
 import { UserReq } from 'src/utils/decorators/user-req/user-req.decorator';
 import { UserDocument } from 'src/users/model/user.schema';
+import { ProfileAuthDto } from './dto/profile-auth.dto';
+import { ProfilePasswordAuthDto } from './dto/profile-password-auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -45,7 +47,8 @@ export class AuthController {
     }
 
     @Post('reset-password/:code')
-    resetPassword(@Param('code') code: string, @Body() resetPasswordAuthDto: ResetPasswordAuthDto) {
+    resetPassword(@Param('code') code: string, 
+                  @Body() resetPasswordAuthDto: ResetPasswordAuthDto) {
         return this.authService.resetPassword(code, resetPasswordAuthDto.password);
     }
 
@@ -54,4 +57,19 @@ export class AuthController {
     getAutenticatedUser(@UserReq() user: UserDocument) {
         return user;
     }
- }
+
+    @Patch('/profile')
+    @UseGuards(UserAutenticatedGuard)
+    updateProfile(@UserReq() user: UserDocument,
+                  @Body() profileAuthDto: ProfileAuthDto) {
+        return this.authService.updateProfile(user, profileAuthDto);
+    }
+
+    @Patch('/update-password')
+    @UseGuards(UserAutenticatedGuard)
+    updateProfilePassword(@UserReq() user: UserDocument,
+                          @Body() profilePasswordAuthDto: ProfilePasswordAuthDto) {
+        return this.authService.updateProfilePassword(user, profilePasswordAuthDto);
+    }
+
+}

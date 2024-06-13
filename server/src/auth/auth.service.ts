@@ -10,6 +10,8 @@ import { compareHash, generateHash } from 'src/utils/scripts/hashHandling';
 import { generateRegisterCode } from 'src/utils/scripts/registerCodeGenerator';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { RegisterCode } from 'src/register-codes/model/register-code.schema';
+import { ProfileAuthDto } from './dto/profile-auth.dto';
+import { ProfilePasswordAuthDto } from './dto/profile-password-auth.dto';
 
 type Token = {
     token: string
@@ -188,6 +190,57 @@ export class AuthService {
         return new ResponseEntity<User>()
             .setRecords(user)
             .setTitle('resetPassword')
+            .setMessage('Contraseña actualizada correctamente')
+            .setStatus(201)
+            .build();
+    }
+
+    /**
+     * @description actualiza el name/email del usuario
+     * @param login 
+     * @returns Promise<ResponseEntity<User>>
+     */
+    async updateProfile(user: UserDocument, profileData: ProfileAuthDto): Promise<ResponseEntity<User>> {
+        const { name, email } = profileData; 
+
+        const userExist = await this.userModel.findOne({ email: profileData.email });
+        if(userExist && userExist._id.toString() != user._id.toString()) 
+            throw new ConflictException('Ya existe un usuario registrado con ese email');
+
+        user.name = name;
+        user.email = email;
+
+        const userUpdated = await user.save();
+
+        return new ResponseEntity<User>()
+            .setRecords(userUpdated)
+            .setTitle('updateProfile')
+            .setMessage('Perfil actualizado correctamente')
+            .setStatus(201)
+            .build();
+
+    }
+
+    /**
+     * @description permite cambiar la contraseña estando loggeado
+     * @param login 
+     * @returns Promise<ResponseEntity<User>>
+     */
+    async updateProfilePassword(user: UserDocument, profileData: ProfilePasswordAuthDto): Promise<ResponseEntity<User>> {
+        const { currentPassword, password } = profileData; 
+
+        const userToUpdate = await this.userModel.findById(user._id);
+
+        const check = await compareHash(currentPassword, userToUpdate.password)
+        if(!check) throw new ForbiddenException('Contraseña incorrecta');
+        
+        user.password = await generateHash(password);
+
+        const userUpdated = await user.save();
+
+        return new ResponseEntity<User>()
+            .setRecords(userUpdated)
+            .setTitle('updateProfilePassword')
             .setMessage('Contraseña actualizada correctamente')
             .setStatus(201)
             .build();
