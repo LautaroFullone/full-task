@@ -96,7 +96,7 @@ export class AuthService {
 
         return new ResponseEntity<Token>()
             .setRecords({ token })
-            .setTitle('handleRegister')
+            .setTitle('login')
             .setMessage('Sesion iniciada correctamente')
             .setStatus(201)
             .build();
@@ -232,7 +232,7 @@ export class AuthService {
         const userToUpdate = await this.userModel.findById(user._id);
 
         const check = await compareHash(currentPassword, userToUpdate.password)
-        if(!check) throw new ForbiddenException('Contraseña incorrecta');
+        if(!check) throw new ForbiddenException('Contraseña actual incorrecta');
         
         user.password = await generateHash(password);
 

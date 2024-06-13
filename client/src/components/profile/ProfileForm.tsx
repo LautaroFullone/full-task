@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form"
 import ErrorMessage from "../ErrorMessage"
 import { User, UserProfileFormData } from "@/types/index"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { updateProfile } from "@/services/AuthApi"
+import { toast } from "react-toastify"
 
 interface ProfileForm {
     user: User
@@ -9,28 +11,26 @@ interface ProfileForm {
 
 export default function ProfileForm({ user }: ProfileForm) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: user })
+    const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: user });
 
-    // const mutation = useMutation({
-    //     mutationFn: updateProject,
-    //     onSuccess: (response) => {
-    //         queryClient.invalidateQueries({ queryKey: ['getAllProjects'] }) //volver a ejecutar api call que estaba en cache
-    //         queryClient.invalidateQueries({ queryKey: ['editProject', projectID] })
-    //         toast.success(response.message);
-    //         navigate('/');
-    //     },
-    //     onError: (response) => {
-    //         toast.error(response.message);
-    //     }
-    // })
+    const queryClient = useQueryClient();
 
-    function onSubmit(formData: UserProfileFormData) {
-        // mutation.mutate({ id: projectID, newData: formData })
-    }
+    const mutation = useMutation({
+        mutationFn: updateProfile,
+        onSuccess: (response) => {
+            queryClient.invalidateQueries({ queryKey: ['user'] })
+            toast.success(response.message);
+        },
+        onError: (response) => {
+            toast.error(response.message);
+        }
+    })
+
+    function onSubmit(formData: UserProfileFormData) { mutation.mutate(formData) }
 
     return (
         <>
-            <div className="mx-auto max-w-3xl g">
+            <div className="mx-auto max-w-3xl">
                 <h1 className="text-5xl font-black ">Mi Perfil</h1>
                 <p className="text-2xl font-light text-gray-500 mt-5">Aquí puedes actualizar tu información</p>
 

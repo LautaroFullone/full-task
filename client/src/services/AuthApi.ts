@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import { ForgotPasswordFormData, LoginFormData, NewPasswordFormData, RegisterFormData, RequestRegisterCodeFormData, userSchema } from "../types";
+import { ForgotPasswordFormData, LoginFormData, NewPasswordFormData, RegisterFormData, RequestRegisterCodeFormData, UpdateProfilePasswordFormData, UserProfileFormData, userSchema } from "../types";
 import { isAxiosError } from "axios";
 
 export async function registerAccount(formData: RegisterFormData){
@@ -126,6 +126,38 @@ export async function getAutenticatedUser() {
 
     } catch (error) {
         console.log('# ERROR: getAutenticatedUser', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}
+
+export async function updateProfile(formData: UserProfileFormData) {
+    try {
+        const { data } = await api.patch(`/auth/profile`, formData)
+        return data;
+
+    } catch (error) {
+        console.log('# ERROR: updateProfile', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}
+
+export async function updateProfilePassword(formData: UpdateProfilePasswordFormData) {
+    try {
+        const { data } = await api.patch(`/auth/update-password`, formData)
+        return data;
+
+    } catch (error) {
+        console.log('# ERROR: updateProfilePassword', error)
         if (isAxiosError(error) && error.response)
             throw new Error(error.response.data.message)
         else if (error instanceof Error)

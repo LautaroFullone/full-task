@@ -6,6 +6,7 @@ export type FormActionsType = 'create' | 'edit';
 export const authSchema = z.object({
     name: z.string(),
     email: z.string(),
+    currentPassword: z.string(),
     password: z.string(),
     passwordConfirmation: z.string()
 })
@@ -17,6 +18,8 @@ export type RegisterFormData = Pick<Auth, 'name' | 'email' | 'password' | 'passw
 export type RequestRegisterCodeFormData = Pick<Auth, 'email'>
 export type ForgotPasswordFormData = Pick<Auth, 'email'>
 export type NewPasswordFormData = Pick<Auth, 'password' | 'passwordConfirmation'>
+export type UserProfileFormData = Pick<Auth, 'name' | 'email'>
+export type UpdateProfilePasswordFormData = Pick<Auth, 'currentPassword' | 'password' | 'passwordConfirmation' >
 
 export const userSchema = z.object({
     _id: z.string(),
@@ -25,8 +28,6 @@ export const userSchema = z.object({
 })
 
 export type User = z.infer<typeof userSchema>
-export type UserProfileFormData = Pick<User, 'name' | 'email'>
-
 
 //---------------------<[ TEAM ]>--------------------
 export const noteSchema = z.object({

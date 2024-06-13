@@ -31,7 +31,7 @@ export default function RegisterView() {
 
     const password = watch('password');
 
-    function handleRegister(formData: RegisterFormData) {
+    function onSubmit(formData: RegisterFormData) {
         mutation.mutate(formData)
     }
 
@@ -43,7 +43,7 @@ export default function RegisterView() {
                 <span className=" text-fuchsia-500 font-bold"> crear tu cuenta</span>
             </p>
 
-            <form onSubmit={handleSubmit(handleRegister)}
+            <form onSubmit={handleSubmit(onSubmit)}
                 className="space-y-8 p-10 bg-white mt-10 rounded-lg"
                 noValidate>
                     
