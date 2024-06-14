@@ -8,6 +8,7 @@ import { ResponseEntity } from 'src/utils/responses';
 import { Task, TaskDocument, taskStatus } from './model/task.schema';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { UserDocument } from 'src/users/model/user.schema';
+import { Note, NoteDocument } from 'src/notes/model/note.schema';
 
 interface ModelExt<T> extends Model<T> {
     delete: Function;
@@ -17,6 +18,7 @@ interface ModelExt<T> extends Model<T> {
 export class TasksService {
 
     constructor(@InjectModel(Task.name) private readonly taskModel: ModelExt<TaskDocument>,
+                @InjectModel(Note.name) private readonly noteModel: ModelExt<NoteDocument>,
                 @InjectModel(Project.name) private readonly projectModel: ModelExt<TaskDocument>) { }
 
     async createTask(project: ProjectDocument, createTaskDto: CreateTaskDto): Promise<ResponseEntity<Task>> {
@@ -94,6 +96,7 @@ export class TasksService {
 
         await Promise.allSettled([
             this.taskModel.findByIdAndDelete(taskToDelete._id),
+            this.noteModel.deleteMany({ task: taskToDelete._id }),
             project.save()
         ]);
 

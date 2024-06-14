@@ -3,7 +3,7 @@ import { CreateProjectDto } from '../projects/dto/create-project.dto';
 import { UpdateProjectDto } from '../projects/dto/update-project.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Project, ProjectDocument } from '../projects/model/project.schema';
-import { Model, ObjectId, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { ResponseEntity } from 'src/utils/responses';
 import { UserDocument } from 'src/users/model/user.schema';
 
