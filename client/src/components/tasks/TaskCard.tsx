@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Fragment } from "react"
 import { useSearchParams } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useDraggable } from "@dnd-kit/core"
 
 interface TaskCardTProps {
     task: Task,
@@ -15,8 +16,8 @@ interface TaskCardTProps {
 
 export default function TaskCard({ task, projectID, canUserEdit }: TaskCardTProps) {
 
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: task._id })
     const [_, setSearchParams] = useSearchParams();
-
     const queryClient = useQueryClient()
 
     const { mutate } = useMutation({
@@ -30,15 +31,21 @@ export default function TaskCard({ task, projectID, canUserEdit }: TaskCardTProp
         }
     })
 
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        cursor: 'grabbing'
+    } : undefined
+
     return (
         <li className="p-5 bg-white border border-slate-300 flex justify-between gap-3">
 
-            <div className="min-w-0 flex flex-col gap-y-4">
-                <button type="button" 
-                    onClick={() => setSearchParams({ viewTask: task._id })}
-                    className="text-xl font-bold text-slate-600 text-left">
+            <div className="min-w-0 flex flex-col gap-y-4" style={style}
+                {...listeners} {...attributes} ref={setNodeRef}>
+                
+                <p className="text-xl font-bold text-slate-600 text-left">
                     {task.taskName}
-                </button>
+                </p>
+
                 <p className="text-slate-500">{task.description}</p>
             </div>
 
