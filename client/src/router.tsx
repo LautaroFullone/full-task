@@ -33,8 +33,7 @@ export default function Router() {
                         <Route path='/profile/password' element={<ChangePasswordView />} />
                     </Route>
 
-                    <Route path='/error' element={<ErrorView />} />
-                    <Route path='*' element={<Navigate to={'/'} />} />
+                    <Route path='*' element={<Navigate to={'/error'} />} />
                 </Route>
 
                 <Route element={<AuthLayout />}>
@@ -46,6 +45,10 @@ export default function Router() {
                     <Route path='/auth/reset-password' element={<ResetPasswordView /> } />
                 </Route>
 
+                <Route element={<AuthLayout />}>
+                    <Route path='/error' element={<ErrorView />} />
+                </Route>
+                
             </Routes>
         </BrowserRouter>
     )

@@ -26,7 +26,7 @@ export default function DetailProjectView() {
     const canEdit = useMemo(() => data?.records.manager === user?._id, [data, user])
 
     if(isLoading && isUserLoading) return 'Cargando...'
-    if(isError) return <Navigate to={'error'} />
+    if(isError) return <Navigate to={'/error'} />
     if(data && user) return (
         <>
             <h1 className="text-5xl font-black">{data.records.projectName}</h1>
