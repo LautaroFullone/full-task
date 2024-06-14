@@ -7,6 +7,7 @@ import { TasksModule } from 'src/tasks/tasks.module';
 import { Task, TaskSchema } from 'src/tasks/model/task.schema';
 import { TeamModule } from 'src/team/team.module';
 import { NotesModule } from 'src/notes/notes.module';
+import { Note, NoteSchema } from 'src/notes/model/note.schema';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { NotesModule } from 'src/notes/notes.module';
       [
         { name: Project.name, schema: ProjectSchema },
         { name: Task.name, schema: TaskSchema },
+        { name: Note.name, schema: NoteSchema },
       ]
     ),
     TasksModule,
