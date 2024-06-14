@@ -29,7 +29,7 @@ export default function ChangePasswordView() {
 
     const password = watch('password');
 
-    function onSubmit(formData: UpdateProfilePasswordFormData) { console.log('onSubmt'); mutation.mutate(formData) }
+    function onSubmit(formData: UpdateProfilePasswordFormData) { mutation.mutate(formData) }
 
     return (
         <>

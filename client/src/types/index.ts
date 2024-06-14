@@ -20,6 +20,7 @@ export type ForgotPasswordFormData = Pick<Auth, 'email'>
 export type NewPasswordFormData = Pick<Auth, 'password' | 'passwordConfirmation'>
 export type UserProfileFormData = Pick<Auth, 'name' | 'email'>
 export type UpdateProfilePasswordFormData = Pick<Auth, 'currentPassword' | 'password' | 'passwordConfirmation' >
+export type CheckPasswordFormData = Pick<Auth, 'password'>
 
 export const userSchema = z.object({
     _id: z.string(),

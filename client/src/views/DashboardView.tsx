@@ -1,38 +1,21 @@
-import { deleteProject, getAllProjects } from "@/services/ProjectApi";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAllProjects } from "@/services/ProjectApi";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import ProjectCard from "@/components/projects/ProjectCard";
 import useAuth from "@/hooks/useAuth";
+import ProjectDeleteModal from "@/components/projects/ProjectDeleteModal";
 
 export default function DashboardView() {
 
     const { data: user, isLoading: isUserLoading } = useAuth()
-
     const { data, isError, error, isLoading } = useQuery({
         queryKey: ['getAllProjects'],
         queryFn: getAllProjects,
         retry: 2
     })
 
-    const queryClient = useQueryClient()
-
-    const { mutate } = useMutation({
-        mutationFn: deleteProject,
-        onSuccess: (response) => {
-            queryClient.invalidateQueries({ queryKey: ['getAllProjects'] })
-            toast.success(response.message);
-        },
-        onError: (response) => {
-            toast.error(response.message)
-        }
-    })
-
     if(isLoading && isUserLoading) return 'Cargando...'
     if(isError) return `Ocurrió un error al cargar los proyectos: ${error.message}`;
-
-    function handleDeleteProject(projectID: string) { mutate(projectID); }
-
     if(data && user){ 
         return (
             <>
@@ -57,16 +40,16 @@ export default function DashboardView() {
                                 </Link>
                             </p>
                         :   <ul role="list" className="divide-y divide-gray-100 border border-gray-100 mt-10 bg-white shadow-lg">
-                                
-                                { data.records.map((project) => 
-                                    <ProjectCard key={project._id} 
-                                        userID={user._id}
-                                        project={project} 
-                                        onDelete={handleDeleteProject} />) }
+                                { 
+                                    data.records.map((project) => 
+                                        <ProjectCard key={project._id} 
+                                            userID={user._id}
+                                            project={project} />) 
+                                }
                             </ul>
                     
                 }
-
+                <ProjectDeleteModal />
             </>
         )
     }

@@ -72,4 +72,11 @@ export class AuthController {
         return this.authService.updateProfilePassword(user, profilePasswordAuthDto);
     }
 
+    @Post('/check-password')
+    @UseGuards(UserAutenticatedGuard)
+    checkPassword(@UserReq() user: UserDocument,
+                  @Body('password') password: string) {
+        return this.authService.checkPassword(user, password);
+    }
+
 }

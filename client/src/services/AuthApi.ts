@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import { ForgotPasswordFormData, LoginFormData, NewPasswordFormData, RegisterFormData, RequestRegisterCodeFormData, UpdateProfilePasswordFormData, UserProfileFormData, userSchema } from "../types";
+import { ForgotPasswordFormData, LoginFormData, NewPasswordFormData, RegisterFormData, RequestRegisterCodeFormData, UpdateProfilePasswordFormData, User, UserProfileFormData, userSchema } from "../types";
 import { isAxiosError } from "axios";
 
 export async function registerAccount(formData: RegisterFormData){
@@ -158,6 +158,22 @@ export async function updateProfilePassword(formData: UpdateProfilePasswordFormD
 
     } catch (error) {
         console.log('# ERROR: updateProfilePassword', error)
+        if (isAxiosError(error) && error.response)
+            throw new Error(error.response.data.message)
+        else if (error instanceof Error)
+            throw new Error(error.message);
+        else
+            throw new Error('An unknown error has ocurred')
+    }
+}
+
+export async function checkPassword(password: string) {
+    try {
+        const { data } = await api.post(`/auth/check-password`, { password })
+        return data;
+
+    } catch (error) {
+        console.log('# ERROR: checkPassword', error)
         if (isAxiosError(error) && error.response)
             throw new Error(error.response.data.message)
         else if (error instanceof Error)

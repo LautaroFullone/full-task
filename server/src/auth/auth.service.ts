@@ -17,6 +17,10 @@ type Token = {
     token: string
 }
 
+type ValidPassword = {
+    isValid: boolean
+}
+
 @Injectable()
 export class AuthService {
     
@@ -243,6 +247,26 @@ export class AuthService {
             .setTitle('updateProfilePassword')
             .setMessage('Contraseña actualizada correctamente')
             .setStatus(201)
+            .build();
+    }
+
+    /**
+     * @description permite validar si la contraseña enviada es correcta
+     * @param login 
+     * @returns Promise<ResponseEntity<User>>
+     */
+    async checkPassword(user: UserDocument, password: User['password']): Promise<ResponseEntity<ValidPassword>> {
+
+        const userToCheck = await this.userModel.findById(user._id);
+
+        const check = await compareHash(password, userToCheck.password)
+        if(!check) throw new ForbiddenException('Contraseña incorrecta');
+        
+        return new ResponseEntity<ValidPassword>()
+            .setRecords({ isValid: check })
+            .setTitle('checkPassword')
+            .setMessage('Contraseña validada')
+            .setStatus(200)
             .build();
     }
     

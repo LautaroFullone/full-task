@@ -2,7 +2,7 @@ import { ProjectOfListSchema, User } from "@/types/index"
 import { isManager } from "@/utils/policies"
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react"
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { Fragment } from "react/jsx-runtime"
 
 function ManagerBadge(): React.ReactElement {
@@ -17,10 +17,11 @@ function ColaboratorBadge(): React.ReactElement {
 interface ProjectCardProps {
     project: ProjectOfListSchema;
     userID: User['_id'];
-    onDelete: (projectID: string) => void;
 }
 
-export default function ProjectCard({ project, userID, onDelete }: ProjectCardProps) {
+export default function ProjectCard({ project, userID }: ProjectCardProps) {
+
+    const [_, setSearchParams] = useSearchParams();
 
     return (
         <li className="flex justify-between gap-x-6 px-5 py-10">
@@ -85,7 +86,7 @@ export default function ProjectCard({ project, userID, onDelete }: ProjectCardPr
                                         <MenuItem>
                                             <button type='button'
                                                 className='block px-3 py-1 text-sm leading-6 text-red-500'
-                                                onClick={() => onDelete(project._id)}>
+                                                onClick={() => setSearchParams({ deleteProject: project._id })}>
                                                 Eliminar Proyecto
                                             </button>
                                         </MenuItem>
