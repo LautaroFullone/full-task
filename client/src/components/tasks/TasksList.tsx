@@ -1,4 +1,4 @@
-import { Project, Task, TaskStatus } from '@/types/index'
+import { Project, ResponseEntityProject, Task, TaskStatus } from '@/types/index'
 import TaskCard from './TaskCard'
 import { statusTranslations } from '@/locales/es'
 import TaskDrop from './TaskDrop'
@@ -61,7 +61,7 @@ export default function TasksList({ tasks, projectID, canUserEdit }: TasksListPr
             const newStatus = over.id as TaskStatus; //hacia donde arrastro la task
             mutation.mutate({ projectID, taskID, status: newStatus })
 
-            queryClient.setQueryData(['getProject', projectID], (previousData) => { //actualizacion optimista
+            queryClient.setQueryData(['getProject', projectID], (previousData: ResponseEntityProject ) => { //actualizacion optimista
                 
                 const updatedTasks = previousData.records.tasks.map((task: Task) => {
                     if (task._id == taskID)

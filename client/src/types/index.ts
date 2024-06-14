@@ -81,6 +81,12 @@ export const projectSchema = z.object({ //para validar lo que envia la api
     manager: z.string()
 })
 
+export const editProjectSchema = projectSchema.pick({ 
+    projectName: true,
+    clientName: true,
+    description: true,
+})
+
 export const projectOfListSchema = projectSchema.pick({
     _id: true,
     projectName: true,
@@ -112,9 +118,13 @@ const responseEntitySchema = z.object({
     status: z.number(),
 })
 
+export const responseProjectEditSchema = responseEntitySchema.extend({
+    records: editProjectSchema
+});
 export const responseProjectSchema = responseEntitySchema.extend({
     records: projectSchema
 });
+export type ResponseEntityProject = z.infer<typeof responseProjectSchema>
 
 export const responseProjectsListSchema = responseEntitySchema.extend({
     records: z.array(projectOfListSchema)

@@ -1,5 +1,5 @@
 import ProjectEditor from "@/components/projects/ProjectEditor"
-import { getProjectById } from "@/services/ProjectApi"
+import { getProjectByIdForEdit } from "@/services/ProjectApi"
 import { useQuery } from "@tanstack/react-query"
 import { Navigate, useParams } from "react-router-dom"
 
@@ -9,7 +9,7 @@ export default function EditProjectView() {
 
     const { data, isError, isLoading } = useQuery({
         queryKey: ['editProject', projectID], 
-        queryFn: () => getProjectById(projectID!),
+        queryFn: () => getProjectByIdForEdit(projectID!),
         retry: false,
     })
 
